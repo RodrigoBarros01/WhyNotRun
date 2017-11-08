@@ -189,11 +189,26 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="BO\PublicationBO.cs" />
+    <Compile Include="BO\TechieBO.cs" />
+    <Compile Include="BO\UserBO.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\PublicationController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
+    <Compile Include="DAO\ContextAsyncDAO.cs" />
+    <Compile Include="DAO\PublicationDAO.cs" />
+    <Compile Include="DAO\TechieDAO.cs" />
+    <Compile Include="DAO\UserDAO.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Comment.cs" />
+    <Compile Include="Models\Publication.cs" />
+    <Compile Include="Models\Techie.cs" />
+    <Compile Include="Models\User.cs" />
+    <Compile Include="Models\UserViewModel\CreateUserViewModel.cs" />
+    <Compile Include="Models\UserViewModel\VisualizationUserViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -250,7 +265,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
