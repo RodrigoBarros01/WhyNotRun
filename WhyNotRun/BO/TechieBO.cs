@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using WhyNotRun.DAO;
+using WhyNotRun.Models;
 
 namespace WhyNotRun.BO
 {
@@ -14,8 +16,6 @@ namespace WhyNotRun.BO
         {
             _techiaDao = new TechieDAO();
         }
-
-
 
     }
 }

@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using WhyNotRun.BO;
+using WhyNotRun.Models.PublicationViewModel;
 
 namespace WhyNotRun.Controllers
 {
@@ -34,7 +35,38 @@ namespace WhyNotRun.Controllers
             return NotFound();
         }
 
+        /// <summary>
+        /// Cadastrar publicação
+        /// </summary>
+        /// <param name="model">publicação a ser cadastrada</param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("publication")]
+        public async Task<IHttpActionResult> CreatePublication(CreatePublicationViewModel model)
+        {
+            var resultado = await _publicationBo.CreatePublication(model.ToPublication());
+            if (resultado != null)
+            {
+                return Ok(resultado);
+            }
+            return InternalServerError();
+        }
 
+        /// <summary>
+        /// Reage a uma publicação
+        /// </summary>
+        /// <param name="model">dados da publicação reagida</param>
+        [HttpPatch]
+        [Route("publication/react")]
+        public async Task<IHttpActionResult> React(ReactPublicationViewModel model)
+        {
+            var resultado = await _publicationBo.React(model.UserId.ToObjectId(), model.PublicationId.ToObjectId(), model.Like);
+            if (resultado)
+            {
+                return Ok(await _publicationBo.SearchPublication(model.PublicationId.ToObjectId()));
+            }
+            return InternalServerError();
+        }
 
     }
 }

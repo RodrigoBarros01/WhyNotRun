@@ -46,6 +46,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="JWT, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\JWT.3.1.1\lib\net46\JWT.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.5\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
     </Reference>
@@ -58,6 +61,9 @@
     </Reference>
     <Reference Include="MongoDB.Driver.Core, Version=2.4.4.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MongoDB.Driver.Core.2.4.4\lib\net45\MongoDB.Driver.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -80,9 +86,6 @@
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http">
     </Reference>
@@ -192,6 +195,7 @@
     <Compile Include="BO\PublicationBO.cs" />
     <Compile Include="BO\TechieBO.cs" />
     <Compile Include="BO\UserBO.cs" />
+    <Compile Include="BO\UtilBO.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PublicationController.cs" />
     <Compile Include="Controllers\UserController.cs" />
@@ -205,6 +209,8 @@
     </Compile>
     <Compile Include="Models\Comment.cs" />
     <Compile Include="Models\Publication.cs" />
+    <Compile Include="Models\PublicationViewModel\CreatePublicationViewModel.cs" />
+    <Compile Include="Models\PublicationViewModel\ReactPublicationViewModel.cs" />
     <Compile Include="Models\Techie.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserViewModel\CreateUserViewModel.cs" />

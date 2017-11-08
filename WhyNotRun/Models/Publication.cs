@@ -11,8 +11,8 @@ namespace WhyNotRun.Models
     {
         public Publication()
         {
-            Techies = new List<Techie>();
-            Comments = new List<Comment>();
+            Techies = new List<ObjectId>();
+            Comments = new List<ObjectId>();
             Likes = new List<ObjectId>();
             Dislikes = new List<ObjectId>();
         }
@@ -27,13 +27,13 @@ namespace WhyNotRun.Models
         public string Description { get; set; }
 
         [BsonElement("techies")]
-        public List<Techie> Techies { get; set; }
+        public List<ObjectId> Techies { get; set; }
 
         [BsonElement("user")]
-        public User User { get; set; }
+        public ObjectId User { get; set; }
 
         [BsonElement("comments")]
-        public List<Comment> Comments { get; set; }
+        public List<ObjectId> Comments { get; set; }
 
         [BsonElement("likes")]
         public List<ObjectId> Likes { get; set; }
@@ -45,6 +45,6 @@ namespace WhyNotRun.Models
         public DateTime DateCreation { get; set; }
 
         [BsonElement("deletedAt"), BsonIgnoreIfNull]
-        public DateTime DeletedAt { get; set; }
+        public DateTime? DeletedAt { get; set; }
     }
 }

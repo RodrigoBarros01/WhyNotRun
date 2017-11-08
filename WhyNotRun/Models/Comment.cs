@@ -25,7 +25,7 @@ namespace WhyNotRun.Models
         public DateTime DateCreation { get; set; }
 
         [BsonElement("deletedAt"), BsonIgnoreIfNull]
-        public DateTime DeletedAt { get; set; }
+        public DateTime? DeletedAt { get; set; }
         
     }
 }
