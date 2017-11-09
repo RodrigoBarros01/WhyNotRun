@@ -204,6 +204,7 @@
     <Compile Include="BO\UtilBO.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PublicationController.cs" />
+    <Compile Include="Controllers\TechieController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="DAO\ContextAsyncDAO.cs" />
@@ -220,6 +221,8 @@
     <Compile Include="Models\PublicationViewModel\ReactPublicationViewModel.cs" />
     <Compile Include="Models\PublicationViewModel\ViewPublicationViewModel.cs" />
     <Compile Include="Models\Techie.cs" />
+    <Compile Include="Models\TechieViewModel\CreateTechieViewModel.cs" />
+    <Compile Include="Models\Token.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserViewModel\CreateUserViewModel.cs" />
     <Compile Include="Models\UserViewModel\LoginViewModel.cs" />

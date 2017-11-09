@@ -17,6 +17,17 @@ namespace WhyNotRun.DAO
         }
 
         /// <summary>
+        /// Cria uma nova Techie
+        /// </summary>
+        /// <param name="techie"></param>
+        /// <returns></returns>
+        public async Task<Techie> CreateTechie(Techie techie)
+        {
+            await Collection.InsertOneAsync(techie);
+            return techie;
+        }
+
+        /// <summary>
         /// Faz a busca de uma Techie pelo Id
         /// </summary>
         /// <param name="id"> Id da Techie</param>
@@ -24,6 +35,14 @@ namespace WhyNotRun.DAO
         public async Task<Techie> SearchTechiePerId(ObjectId id)
         {
             var filter = FilterBuilder.Eq(a => a.Id, id)
+                & FilterBuilder.Exists(a => a.DeletedAt, false);
+            var result = await Collection.Find(filter).FirstOrDefaultAsync();
+            return result;
+        }
+
+        public async Task<Techie> SearchTechiePerName(string name)
+        {
+            var filter = FilterBuilder.Eq(a => a.Name, name)
                 & FilterBuilder.Exists(a => a.DeletedAt, false);
             var result = await Collection.Find(filter).FirstOrDefaultAsync();
             return result;

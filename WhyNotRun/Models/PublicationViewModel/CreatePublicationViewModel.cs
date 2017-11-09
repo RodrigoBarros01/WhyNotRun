@@ -17,7 +17,7 @@ namespace WhyNotRun.Models.PublicationViewModel
         [Required(ErrorMessage = "A descrição é obrigatória")]
         public string Description { get; set; }
 
-        [Required(ErrorMessage = "As tecnologias são obrigatórios")]
+        //[Required(ErrorMessage = "As tecnologias são obrigatórios")]
         public List<string> Techies { get; set; }
 
         [Required(ErrorMessage = "O usuário é obrigatório")]

@@ -48,7 +48,7 @@ namespace WhyNotRun.Models.PublicationViewModel
             {
                 Task.Run(async () =>
                 {
-                    Techies.Add((await techieBo.SearchTechiePerId(tecId)).Name);
+                    Techies.Add((await techieBo.SearchTechie(tecId)).Name);
 
                 }).Wait();
             }

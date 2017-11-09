@@ -67,11 +67,16 @@ namespace WhyNotRun.Controllers
             var resultado = await _publicationBo.React(model.UserId.ToObjectId(), model.PublicationId.ToObjectId(), model.Like);
             if (resultado)
             {
-                return Ok(await _publicationBo.SearchPublication(model.PublicationId.ToObjectId()));
+                return Ok(new ViewPublicationViewModel(await _publicationBo.SearchPublication(model.PublicationId.ToObjectId())));
             }
             return InternalServerError();
         } 
 
+        /// <summary>
+        /// Adiciona um comentario a uma publicação
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPatch]
         [Route("publication/comment")]
         public async Task<IHttpActionResult> AddComment(AddCommentViewModel model)
@@ -79,12 +84,28 @@ namespace WhyNotRun.Controllers
             var resultado = await _publicationBo.AddComment(model.ToComment(), model.PublicationId.ToObjectId());
             if (resultado)
             {
-                return Ok(await _publicationBo.SearchPublication(model.PublicationId.ToObjectId()));
+                return Ok(new ViewPublicationViewModel(await _publicationBo.SearchPublication(model.PublicationId.ToObjectId())));
             }
             return InternalServerError();
 
         }
 
+        /// <summary>
+        /// Busca publicações com base em uma palavra chave
+        /// </summary>
+        /// <param name="text"></param>
+        [HttpGet]
+        [Route("publication/{text}")]
+        public async Task<IHttpActionResult> SearchPublications(string text)
+        {
+            var result = await _publicationBo.SearchPublications(text);
+            if (result != null)
+            {
+                var vpvm = new ViewPublicationViewModel();
+                return Ok(vpvm.ToList(result));
+            }
+            return NotFound();
+        }
 
 
 

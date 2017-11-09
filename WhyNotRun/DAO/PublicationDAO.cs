@@ -23,7 +23,7 @@ namespace WhyNotRun.DAO
         public async Task<List<Publication>> ListPublications()
         {
             var filter = FilterBuilder.Exists(a => a.DeletedAt, false);
-            return (await Collection.Find(filter).ToListAsync()).OrderBy(a => a.DateCreation).ToList();
+            return (await Collection.Find(filter).ToListAsync()).OrderByDescending(a => a.DateCreation).ToList();
         }
 
         /// <summary>
