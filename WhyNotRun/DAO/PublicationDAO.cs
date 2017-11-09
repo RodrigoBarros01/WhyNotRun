@@ -82,7 +82,36 @@ namespace WhyNotRun.DAO
             var filter = FilterBuilder.Exists(a => a.DeletedAt, false) & FilterBuilder.Eq(a => a.Id, publicationId);
             return await Collection.Find(filter).FirstOrDefaultAsync();
         }
+        
+        /// <summary>
+        /// Adiciona um comentario a uma publicação
+        /// </summary>
+        /// <param name="comment">Comentario a ser adicionado</param>
+        /// <param name="publicationId">publicação que vai receber o comentario</param>
+        public async Task<bool> AddComment(Comment comment, ObjectId publicationId)
+        {
+            var filter = FilterBuilder.Eq(a => a.Id, publicationId) & FilterBuilder.Exists(a => a.DeletedAt, false);
+            var update = UpdateBuilder.Push(a => a.Comments, comment);
 
+            var resultado = await Collection.UpdateOneAsync(filter, update);
+            if (resultado.IsModifiedCountAvailable && resultado.IsAcknowledged)
+            {
+                return resultado.ModifiedCount == 1;
+            }
+            return false;
+
+        }
+
+        /// <summary>
+        /// Procura uma lista de publicações
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <returns></returns>
+        public async Task<List<Publication>> SearchPublications(List<ObjectId> ids)
+        {
+            var filter = FilterBuilder.Exists(a => a.DeletedAt, false) & FilterBuilder.In(a => a.Id, ids);
+            return await Collection.Find(filter).ToListAsync();
+        }
 
 
     }

@@ -31,6 +31,7 @@ namespace WhyNotRun.Models.UserViewModel
                 Id = ObjectId.GenerateNewId(),
                 Name = Name,
                 Password = Password,
+                Profession = Profession,
                 Picture = Picture,
                 Email = Email
             };

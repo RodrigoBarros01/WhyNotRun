@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using WhyNotRun.BO;
 
@@ -29,14 +30,13 @@ namespace WhyNotRun.Models.PublicationViewModel
             {
                 techiesId.Add(id.ToObjectId());
             }
-
-
+            
             return new Publication
             {
                 Title = Title,
                 Description = Description,
                 Techies = techiesId,
-                User = User.ToObjectId()
+                UserId = User.ToObjectId()
             };
         }
 

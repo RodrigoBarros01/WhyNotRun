@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MongoDB.Bson;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,6 +16,11 @@ namespace WhyNotRun.BO
         public TechieBO()
         {
             _techiaDao = new TechieDAO();
+        }
+
+        public async Task<Techie> SearchTechiePerId(ObjectId techieId)
+        {
+            return await _techiaDao.SearchTechiePerId(techieId);
         }
 
     }

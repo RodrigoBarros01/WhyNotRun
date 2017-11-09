@@ -23,9 +23,33 @@ namespace WhyNotRun.DAO
             return user;
         }
 
+        public async Task<bool> ValidEmailExists(string email, ObjectId? userId = null)
+        {
+            var filter = FilterBuilder.Eq(a => a.Id, userId)
+                & FilterBuilder.Eq(a => a.Email, email)
+                & FilterBuilder.Exists(a => a.DeletedAt, false);
+
+            if (userId.HasValue)
+            {
+                filter = filter & FilterBuilder.Ne(a => a.Id, userId.Value);
+            }
+
+            return await Collection.Find(filter).FirstOrDefaultAsync() == null;
+        }
+
         public async Task<User> SearchUserPerId(ObjectId id)
         {
             var filter = FilterBuilder.Eq(a => a.Id, id)
+                & FilterBuilder.Exists(a => a.DeletedAt, false);
+
+            var result = await Collection.Find(filter).FirstOrDefaultAsync();
+            return result;
+        }
+
+        public async Task<User> Login(string email, string password)
+        {
+            var filter = FilterBuilder.Eq(a => a.Email, email)
+                & FilterBuilder.Eq(a => a.Password, password)
                 & FilterBuilder.Exists(a => a.DeletedAt, false);
 
             return await Collection.Find(filter).FirstOrDefaultAsync();

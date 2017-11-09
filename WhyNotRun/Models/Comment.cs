@@ -13,10 +13,7 @@ namespace WhyNotRun.Models
         public ObjectId Id { get; set; }
 
         [BsonElement("user")]
-        public User User { get; set; }
-
-        [BsonElement("publication")]
-        public ObjectId Publication { get; set; }
+        public ObjectId UserId { get; set; }
 
         [BsonElement("description")]
         public string Description { get; set; }
@@ -24,8 +21,15 @@ namespace WhyNotRun.Models
         [BsonElement("dateCreation")]
         public DateTime DateCreation { get; set; }
 
-        [BsonElement("deletedAt"), BsonIgnoreIfNull]
-        public DateTime? DeletedAt { get; set; }
+        [BsonElement("UserName")]
+        public string UserName { get; set; }
+
+        [BsonElement("UserPicture")]
+        public string UserPicture { get; set; }
+
+        [BsonElement("UserProfession")]
+        public string UserProfession { get; set; }
+        
         
     }
 }

@@ -12,10 +12,12 @@ namespace WhyNotRun.BO
     public class PublicationBO
     {
         private PublicationDAO _publicationDao;
+        private UserBO _userBo;
 
         public PublicationBO()
         {
             _publicationDao = new PublicationDAO();
+            _userBo = new UserBO();
         }
 
         /// <summary>
@@ -36,6 +38,7 @@ namespace WhyNotRun.BO
         {
             publication.Id = ObjectId.GenerateNewId();
             publication.DateCreation = DateTime.Now;
+
             return await _publicationDao.CreatePublication(publication);
         }
 
@@ -47,7 +50,7 @@ namespace WhyNotRun.BO
         {
             return await _publicationDao.SearchPublicationById(publicationId);
         }
-        
+
         /// <summary>
         /// Reage a uma publicação
         /// </summary>
@@ -74,7 +77,30 @@ namespace WhyNotRun.BO
                 return await _publicationDao.Dislike(userId, publicationId);
             }
         }
-        
+
+        /// <summary>
+        /// Adiciona um comentario a uma publicação
+        /// </summary>
+        /// <param name="comment">Comentario a ser adicionado</param>
+        /// <param name="publicationId">publicação que vai receber o comentario</param>
+        public async Task<bool> AddComment(Comment comment, ObjectId publicationId)
+        {
+            comment.Id = ObjectId.GenerateNewId();
+            comment.DateCreation = DateTime.Now;
+            
+            var user = await _userBo.SearchUserPerId(comment.UserId);
+            comment.UserName = user.Name;
+            comment.UserPicture = user.Picture;
+            comment.UserProfession = user.Profession;
+
+            return await _publicationDao.AddComment(comment, publicationId);
+        }
+
+        public async Task<List<Publication>> SearchPublications()
+        {
+
+        }
+
 
     }
 }

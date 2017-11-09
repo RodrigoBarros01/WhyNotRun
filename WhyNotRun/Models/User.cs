@@ -27,7 +27,7 @@ namespace WhyNotRun.Models
         [BsonElement("picture")]
         public string Picture { get; set; }
 
-        [BsonElement("deletedAt")]
+        [BsonElement("deletedAt"), BsonIgnoreIfNull]
         public DateTime? DeletedAt { get; set; }
     }
 }

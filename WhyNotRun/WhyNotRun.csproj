@@ -208,12 +208,15 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Comment.cs" />
+    <Compile Include="Models\CommentViewModel\AddCommentViewModel.cs" />
     <Compile Include="Models\Publication.cs" />
     <Compile Include="Models\PublicationViewModel\CreatePublicationViewModel.cs" />
     <Compile Include="Models\PublicationViewModel\ReactPublicationViewModel.cs" />
+    <Compile Include="Models\PublicationViewModel\ViewPublicationViewModel.cs" />
     <Compile Include="Models\Techie.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserViewModel\CreateUserViewModel.cs" />
+    <Compile Include="Models\UserViewModel\LoginViewModel.cs" />
     <Compile Include="Models\UserViewModel\VisualizationUserViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

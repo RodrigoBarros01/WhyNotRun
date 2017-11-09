@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using WhyNotRun.BO;
+using WhyNotRun.Models.CommentViewModel;
 using WhyNotRun.Models.PublicationViewModel;
 
 namespace WhyNotRun.Controllers
@@ -30,7 +31,8 @@ namespace WhyNotRun.Controllers
             var resultado = await _publicationBo.ListPublications();
             if (resultado != null)
             {
-                return Ok(resultado);
+                var vpvm = new ViewPublicationViewModel();
+                return Ok(vpvm.ToList(resultado));
             }
             return NotFound();
         }
@@ -47,7 +49,7 @@ namespace WhyNotRun.Controllers
             var resultado = await _publicationBo.CreatePublication(model.ToPublication());
             if (resultado != null)
             {
-                return Ok(resultado);
+                return Ok(new ViewPublicationViewModel(resultado));
             }
             return InternalServerError();
         }
@@ -66,7 +68,23 @@ namespace WhyNotRun.Controllers
                 return Ok(await _publicationBo.SearchPublication(model.PublicationId.ToObjectId()));
             }
             return InternalServerError();
+        } 
+
+        [HttpPatch]
+        [Route("publication/comment")]
+        public async Task<IHttpActionResult> AddComment(AddCommentViewModel model)
+        {
+            var resultado = await _publicationBo.AddComment(model.ToComment(), model.PublicationId.ToObjectId());
+            if (resultado)
+            {
+                return Ok(await _publicationBo.SearchPublication(model.PublicationId.ToObjectId()));
+            }
+            return InternalServerError();
+
         }
+
+
+
 
     }
 }

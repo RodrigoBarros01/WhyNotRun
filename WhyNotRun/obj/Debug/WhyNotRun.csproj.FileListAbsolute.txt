@@ -101,3 +101,5 @@ C:\Users\rodrigo.barros\Desktop\WhyNotRun\WhyNotRun\obj\Debug\WhyNotRun.csprojRe
 C:\Users\rodrigo.barros\Desktop\WhyNotRun\WhyNotRun\obj\Debug\WhyNotRun.csproj.CoreCompileInputs.cache
 C:\Users\rodrigo.barros\Desktop\WhyNotRun\WhyNotRun\obj\Debug\WhyNotRun.dll
 C:\Users\rodrigo.barros\Desktop\WhyNotRun\WhyNotRun\obj\Debug\WhyNotRun.pdb
+C:\Users\rodrigo.barros\Desktop\WhyNotRun\WhyNotRun\bin\JWT.dll
+C:\Users\rodrigo.barros\Desktop\WhyNotRun\WhyNotRun\bin\JWT.xml

@@ -21,16 +21,34 @@ namespace WhyNotRun.Controllers
             _userBo = new UserBO();
         }
 
-        // TODO: CRIAR ENDPOINT DE LOGIN
+        [HttpPost]
+        [Route("login")]
+        public async Task<IHttpActionResult> Login(LoginViewModel loginViewModel)
+        {
+            var user = await _userBo.Login(loginViewModel.Email, loginViewModel.Password);
+            if (user != null)
+            {
+                return Ok(user);
+            }
+            return NotFound(); ;
+        }
 
         [HttpPost]
         [Route("user")]
         /*[ FAZER VALIDAÇÃO ]*/
         public async Task<IHttpActionResult> CreateUser(CreateUserViewModel model)
         {
-            var user = await _userBo.CreateUser(model.ToUser());
-            //return Created("Cadastrado com sucesso.", new VisualizationUserViewModel(user));
-            return Ok(user);
+            var result = await _userBo.CreateUser(model.ToUser());
+            //var teste = await _userBo.ValidMailExists(result.Email, result.Id);
+            //if (teste != true)
+            //{
+                if (result != null)
+                {
+                    return Ok(result);
+                }
+            //}
+            //return Conflict();
+            return InternalServerError();
         }
     }
 }
