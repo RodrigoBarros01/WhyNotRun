@@ -23,5 +23,11 @@ namespace WhyNotRun.BO
             return await _techiaDao.SearchTechiePerId(techieId);
         }
 
+        public async Task<List<Techie>> ListTechies()
+        {
+            return await _techiaDao.ListTechies();
+        }
+
+
     }
 }

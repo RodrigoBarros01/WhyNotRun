@@ -5,12 +5,14 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using WhyNotRun.BO;
 using WhyNotRun.Models.CommentViewModel;
 using WhyNotRun.Models.PublicationViewModel;
 
 namespace WhyNotRun.Controllers
 {
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class PublicationController : ApiController
     {
         private PublicationBO _publicationBo;

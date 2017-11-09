@@ -23,11 +23,13 @@ namespace WhyNotRun.Models.PublicationViewModel
         public string UserProfession { get; set; }
         
         public List<Comment> Comments { get; set; }
-        
-        public List<ObjectId> Likes { get; set; }
-        
-        public List<ObjectId> Dislikes { get; set; }
-        
+
+        public int Points { get; set; }
+ 
+        //public List<ObjectId> Likes { get; set; }
+
+        //public List<ObjectId> Dislikes { get; set; }
+
         public DateTime DateCreation { get; set; }
 
         public ViewPublicationViewModel(Publication publication)
@@ -35,6 +37,9 @@ namespace WhyNotRun.Models.PublicationViewModel
             Id = publication.Id;
             Title = publication.Title;
             Description = publication.Description;
+
+            Points = publication.Likes.Count() - publication.Dislikes.Count();
+
 
             #region Pega tecnologias
 
@@ -65,8 +70,8 @@ namespace WhyNotRun.Models.PublicationViewModel
             #endregion
 
             Comments = publication.Comments;
-            Likes = publication.Likes;
-            Dislikes = publication.Dislikes;
+            //Likes = publication.Likes;
+            //Dislikes = publication.Dislikes;
             DateCreation = publication.DateCreation;
 
         }

@@ -103,3 +103,6 @@ C:\Users\rodrigo.barros\Desktop\WhyNotRun\WhyNotRun\obj\Debug\WhyNotRun.dll
 C:\Users\rodrigo.barros\Desktop\WhyNotRun\WhyNotRun\obj\Debug\WhyNotRun.pdb
 C:\Users\rodrigo.barros\Desktop\WhyNotRun\WhyNotRun\bin\JWT.dll
 C:\Users\rodrigo.barros\Desktop\WhyNotRun\WhyNotRun\bin\JWT.xml
+C:\Users\rodrigo.barros\Desktop\WhyNotRun\WhyNotRun\bin\System.Web.Cors.dll
+C:\Users\rodrigo.barros\Desktop\WhyNotRun\WhyNotRun\bin\System.Web.Http.Cors.dll
+C:\Users\rodrigo.barros\Desktop\WhyNotRun\WhyNotRun\bin\System.Web.Http.Cors.xml

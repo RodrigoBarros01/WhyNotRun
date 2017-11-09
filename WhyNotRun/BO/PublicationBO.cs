@@ -13,11 +13,13 @@ namespace WhyNotRun.BO
     {
         private PublicationDAO _publicationDao;
         private UserBO _userBo;
+        private TechieBO _techieBo;
 
         public PublicationBO()
         {
             _publicationDao = new PublicationDAO();
             _userBo = new UserBO();
+            _techieBo = new TechieBO();
         }
 
         /// <summary>
@@ -26,7 +28,7 @@ namespace WhyNotRun.BO
         /// <returns>Lista de publicações</returns>
         public async Task<List<Publication>> ListPublications()
         {
-            return (await _publicationDao.ListPublications()).OrderBy(a => a.DateCreation).ToList();
+            return (await _publicationDao.ListPublications());
         }
 
         /// <summary>
@@ -96,9 +98,25 @@ namespace WhyNotRun.BO
             return await _publicationDao.AddComment(comment, publicationId);
         }
 
-        public async Task<List<Publication>> SearchPublications()
+        public async Task<List<Publication>> SearchPublications(string textToSearch)
         {
+            var publications = await ListPublications();
 
+            var filtro1 = publications.Where(a => a.Title.Contains(textToSearch)).Where(a => a.Description.Contains(textToSearch));
+
+            var techies = (await _techieBo.ListTechies()).Where(a => a.Name.Contains(textToSearch));
+
+            var techIds = new List<ObjectId>();
+            foreach (var techieId in techies)
+            {
+                techIds.Add(techieId.Id);
+            }
+
+            //var filtro2 = publications.Where(a => a.Techies.(techIds));
+
+
+
+            return null;
         }
 
 

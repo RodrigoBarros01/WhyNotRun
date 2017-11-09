@@ -30,14 +30,12 @@ namespace WhyNotRun.DAO
         }
 
         /// <summary>
-        /// Lista as Techies por Id
+        /// Lista as Techies não deletadas
         /// </summary>
-        /// <param name="techie"> Techie </param>
         /// <returns> Retorna uma lista de Techies</returns>
-        public async Task<List<Techie>> ListTechiePerId(Techie techie)
+        public async Task<List<Techie>> ListTechies()
         {
-            var filter = FilterBuilder.Eq(a => a.Id, techie.Id)
-                & FilterBuilder.Exists(a => a.DeletedAt, false);
+            var filter = FilterBuilder.Exists(a => a.DeletedAt, false);
             var result = await Collection.Find(filter).ToListAsync();
             return result;
         }
