@@ -12,6 +12,7 @@
 .dll.config
 .cache
 .suo
+.vs/
 # Include dlls if they’re in the NuGet packages directory
 !packageslib.dll
 # Include dlls if they're in the CommonReferences directory
