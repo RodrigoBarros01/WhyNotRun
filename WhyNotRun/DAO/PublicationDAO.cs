@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
+using WhyNotRun.BO;
 using WhyNotRun.Models;
 
 namespace WhyNotRun.DAO
@@ -20,12 +21,12 @@ namespace WhyNotRun.DAO
         /// Lista todas as publicações
         /// </summary>
         /// <returns>Lista de publicações</returns>
-        public async Task<List<Publication>> ListPublications()
+        public async Task<List<Publication>> ListPublications(int pagina)
         {
-            var filter = FilterBuilder.Exists(a => a.DeletedAt, false);// & SortBuilder.Descending(a => a.DateCreation);
-            
+            var filter = FilterBuilder.Exists(a => a.DeletedAt, false);
+            var sort = SortBuilder.Descending(a => a.DateCreation);
 
-            return (await Collection.Find(filter).ToListAsync()).OrderByDescending(a => a.DateCreation).ToList();
+            return await Collection.Find(filter).Sort(sort).Skip((pagina - 1) * UtilBO.QUANTIDADE_PAGINAS).Limit(UtilBO.QUANTIDADE_PAGINAS).ToListAsync();
         }
 
         /// <summary>
@@ -49,7 +50,7 @@ namespace WhyNotRun.DAO
             var update = UpdateBuilder.Push(a => a.Likes, userId).Pull(a => a.Dislikes, userId);
 
             var resultado = await Collection.UpdateOneAsync(filter, update);
-            
+
             return resultado.IsModifiedCountAvailable && resultado.IsAcknowledged && resultado.ModifiedCount == 1;
         }
 
@@ -66,7 +67,7 @@ namespace WhyNotRun.DAO
             var resultado = await Collection.UpdateOneAsync(filter, update);
             return resultado.IsModifiedCountAvailable && resultado.IsAcknowledged && resultado.ModifiedCount == 1;
         }
-        
+
         /// <summary>
         /// Busca uma publicação
         /// </summary>
@@ -76,7 +77,7 @@ namespace WhyNotRun.DAO
             var filter = FilterBuilder.Exists(a => a.DeletedAt, false) & FilterBuilder.Eq(a => a.Id, publicationId);
             return await Collection.Find(filter).FirstOrDefaultAsync();
         }
-        
+
         /// <summary>
         /// Adiciona um comentario a uma publicação
         /// </summary>

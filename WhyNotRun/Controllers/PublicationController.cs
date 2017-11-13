@@ -27,7 +27,7 @@ namespace WhyNotRun.Controllers
         /// </summary>
         /// <returns>Lista de publicações</returns>
         [HttpGet]
-        [Route("publication/publications")]
+        [Route("publications")]
         public async Task<IHttpActionResult> ListPublications()
         {
             var resultado = await _publicationBo.ListPublications();
@@ -35,7 +35,7 @@ namespace WhyNotRun.Controllers
             {
                 return Ok(ViewPublicationViewModel.ToList(resultado));
             }
-            return NotFound();
+            return NotFound(); //mudar isso
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace WhyNotRun.Controllers
         /// <param name="model">publicação a ser cadastrada</param>
         /// <returns></returns>
         [HttpPost]
-        [Route("publication")]
+        [Route("publications")]
         public async Task<IHttpActionResult> CreatePublication(CreatePublicationViewModel model)
         {
             if (!ModelState.IsValid)
@@ -61,13 +61,13 @@ namespace WhyNotRun.Controllers
         /// </summary>
         /// <param name="model">dados da publicação reagida</param>
         [HttpPatch]
-        [Route("publication/react")]
-        public async Task<IHttpActionResult> React(ReactPublicationViewModel model)
+        [Route("publications/{id}/react")]
+        public async Task<IHttpActionResult> React(string id, ReactPublicationViewModel model)
         {
-            var resultado = await _publicationBo.React(model.UserId.ToObjectId(), model.PublicationId.ToObjectId(), model.Like);
+            var resultado = await _publicationBo.React(model.UserId.ToObjectId(), id.ToObjectId(), model.Like);
             if (resultado)
             {
-                return Ok(new ViewPublicationViewModel(await _publicationBo.SearchPublication(model.PublicationId.ToObjectId())));
+                return Ok(new ViewPublicationViewModel(await _publicationBo.SearchPublication(id.ToObjectId())));
             }
             return InternalServerError();
         }
@@ -77,14 +77,14 @@ namespace WhyNotRun.Controllers
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        [HttpPatch]
-        [Route("publication/comment")]
-        public async Task<IHttpActionResult> AddComment(AddCommentViewModel model)
+        [HttpPost]
+        [Route("publications/{id}/comment")] // mudar para comments e receber o id no body
+        public async Task<IHttpActionResult> AddComment(string id,AddCommentViewModel model)
         {
-            var resultado = await _publicationBo.AddComment(model.ToComment(), model.PublicationId.ToObjectId());
+            var resultado = await _publicationBo.AddComment(model.ToComment(), id.ToObjectId());
             if (resultado)
             {
-                return Ok(new ViewPublicationViewModel(await _publicationBo.SearchPublication(model.PublicationId.ToObjectId())));
+                return Ok(new ViewPublicationViewModel(await _publicationBo.SearchPublication(id.ToObjectId())));
             }
             return StatusCode((HttpStatusCode)422);
 
@@ -95,7 +95,7 @@ namespace WhyNotRun.Controllers
         /// </summary>
         /// <param name="text"></param>
         [HttpGet]
-        [Route("publication/{text}")]
+        [Route("publications/{text}")]
         public async Task<IHttpActionResult> SearchPublications(string text)
         {
             var result = await _publicationBo.SearchPublications(text);

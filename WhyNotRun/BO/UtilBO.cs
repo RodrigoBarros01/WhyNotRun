@@ -10,6 +10,7 @@ namespace WhyNotRun.BO
     public static class UtilBO
     {
         public const string OBJECT_ID_REGEX = "^[0-9a-fA-F]{24}$";
+        public const int QUANTIDADE_PAGINAS = 15;
 
 
         public static ObjectId ToObjectId(this string valor)

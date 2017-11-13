@@ -10,9 +10,7 @@ namespace WhyNotRun.Models.PublicationViewModel
     {
         [Required(ErrorMessage = "O usuário é obrigatório")]
         public string UserId { get; set; }
-
-        [Required(ErrorMessage = "A publicação é obrigatória")]
-        public string PublicationId { get; set; }
+        
 
         [Required(ErrorMessage = "A reação é obrigatoria")]
         public bool Like { get; set; }
