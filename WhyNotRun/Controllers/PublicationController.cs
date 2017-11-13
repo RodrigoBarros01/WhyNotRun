@@ -78,13 +78,13 @@ namespace WhyNotRun.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
-        [Route("publications/{id}/comment")] // mudar para comments e receber o id no body
-        public async Task<IHttpActionResult> AddComment(string id,AddCommentViewModel model)
+        [Route("comments")]
+        public async Task<IHttpActionResult> AddComment(AddCommentViewModel model)
         {
-            var resultado = await _publicationBo.AddComment(model.ToComment(), id.ToObjectId());
+            var resultado = await _publicationBo.AddComment(model.ToComment(), model.PublicationId.ToObjectId());
             if (resultado)
             {
-                return Ok(new ViewPublicationViewModel(await _publicationBo.SearchPublication(id.ToObjectId())));
+                return Ok(new ViewPublicationViewModel(await _publicationBo.SearchPublication(model.PublicationId.ToObjectId())));
             }
             return StatusCode((HttpStatusCode)422);
 
