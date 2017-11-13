@@ -17,6 +17,7 @@ namespace WhyNotRun.Models.CommentViewModel
 
         [Required(ErrorMessage = "A publicação é obrigatória")]
         public string PublicationId { get; set; }
+
         public Comment ToComment()
         {
             return new Comment
