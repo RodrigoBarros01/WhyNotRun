@@ -21,10 +21,9 @@ namespace WhyNotRun.DAO
         /// </summary>
         /// <param name="techie"></param>
         /// <returns></returns>
-        public async Task<Techie> CreateTechie(Techie techie)
+        public async Task CreateTechie(Techie techie)
         {
             await Collection.InsertOneAsync(techie);
-            return techie;
         }
 
         /// <summary>

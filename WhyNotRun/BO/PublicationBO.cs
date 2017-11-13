@@ -26,7 +26,7 @@ namespace WhyNotRun.BO
         /// <returns>Lista de publicações</returns>
         public async Task<List<Publication>> ListPublications()
         {
-            return (await _publicationDao.ListPublications());
+            return await _publicationDao.ListPublications();
         }
 
         /// <summary>
@@ -39,7 +39,8 @@ namespace WhyNotRun.BO
             publication.Id = ObjectId.GenerateNewId();
             publication.DateCreation = DateTime.Now;
 
-            return await _publicationDao.CreatePublication(publication);
+            await _publicationDao.CreatePublication(publication);
+            return publication;
         }
 
         /// <summary>

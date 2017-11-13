@@ -22,7 +22,9 @@ namespace WhyNotRun.DAO
         /// <returns>Lista de publicações</returns>
         public async Task<List<Publication>> ListPublications()
         {
-            var filter = FilterBuilder.Exists(a => a.DeletedAt, false);
+            var filter = FilterBuilder.Exists(a => a.DeletedAt, false);// & SortBuilder.Descending(a => a.DateCreation);
+            
+
             return (await Collection.Find(filter).ToListAsync()).OrderByDescending(a => a.DateCreation).ToList();
         }
 
@@ -31,10 +33,9 @@ namespace WhyNotRun.DAO
         /// </summary>
         /// <param name="publication">Publicação a ser criada</param>
         /// <returns></returns>
-        public async Task<Publication> CreatePublication(Publication publication)
+        public async Task CreatePublication(Publication publication)
         {
             await Collection.InsertOneAsync(publication);
-            return publication;
         }
 
         /// <summary>
@@ -48,11 +49,8 @@ namespace WhyNotRun.DAO
             var update = UpdateBuilder.Push(a => a.Likes, userId).Pull(a => a.Dislikes, userId);
 
             var resultado = await Collection.UpdateOneAsync(filter, update);
-            if (resultado.IsModifiedCountAvailable && resultado.IsAcknowledged)
-            {
-                return resultado.ModifiedCount == 1;
-            }
-            return false;
+            
+            return resultado.IsModifiedCountAvailable && resultado.IsAcknowledged && resultado.ModifiedCount == 1;
         }
 
         /// <summary>
@@ -66,11 +64,7 @@ namespace WhyNotRun.DAO
             var update = UpdateBuilder.Push(a => a.Dislikes, userId).Pull(a => a.Likes, userId);
 
             var resultado = await Collection.UpdateOneAsync(filter, update);
-            if (resultado.IsModifiedCountAvailable && resultado.IsAcknowledged)
-            {
-                return resultado.ModifiedCount == 1;
-            }
-            return false;
+            return resultado.IsModifiedCountAvailable && resultado.IsAcknowledged && resultado.ModifiedCount == 1;
         }
         
         /// <summary>
@@ -94,24 +88,21 @@ namespace WhyNotRun.DAO
             var update = UpdateBuilder.Push(a => a.Comments, comment);
 
             var resultado = await Collection.UpdateOneAsync(filter, update);
-            if (resultado.IsModifiedCountAvailable && resultado.IsAcknowledged)
-            {
-                return resultado.ModifiedCount == 1;
-            }
-            return false;
+
+            return resultado.IsModifiedCountAvailable && resultado.IsAcknowledged && resultado.ModifiedCount == 1;
 
         }
 
-        /// <summary>
-        /// Procura uma lista de publicações
-        /// </summary>
-        /// <param name="ids"></param>
-        /// <returns></returns>
-        public async Task<List<Publication>> SearchPublications(List<ObjectId> ids)
-        {
-            var filter = FilterBuilder.Exists(a => a.DeletedAt, false) & FilterBuilder.In(a => a.Id, ids);
-            return await Collection.Find(filter).ToListAsync();
-        }
+        ///// <summary>
+        ///// Procura uma lista de publicações
+        ///// </summary>
+        ///// <param name="ids"></param>
+        ///// <returns></returns>
+        //public async Task<List<Publication>> SearchPublications(List<ObjectId> ids)
+        //{
+        //    var filter = FilterBuilder.Exists(a => a.DeletedAt, false) & FilterBuilder.In(a => a.Id, ids);
+        //    return await Collection.Find(filter).ToListAsync();
+        //}
 
 
     }

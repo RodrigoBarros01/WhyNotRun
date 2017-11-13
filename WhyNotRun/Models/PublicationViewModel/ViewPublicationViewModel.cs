@@ -62,9 +62,12 @@ namespace WhyNotRun.Models.PublicationViewModel
             Task.Run(async () =>
             {
                 var user = await userBo.SearchUserPerId(publication.UserId);
-                UserName = user.Name;
-                UserPicture = user.Picture;
-                UserProfession = user.Profession;
+                if(user != null)
+                {
+                    UserName = user.Name;
+                    UserPicture = user.Picture;
+                    UserProfession = user.Profession;
+                }
             }).Wait();
 
             #endregion
@@ -82,7 +85,7 @@ namespace WhyNotRun.Models.PublicationViewModel
         }
 
 
-        public List<ViewPublicationViewModel> ToList(List<Publication> publications)
+        public static List<ViewPublicationViewModel> ToList(List<Publication> publications)
         {
             List<ViewPublicationViewModel> publicationsList = new List<ViewPublicationViewModel>();
 

@@ -33,8 +33,7 @@ namespace WhyNotRun.Controllers
             var resultado = await _publicationBo.ListPublications();
             if (resultado != null)
             {
-                var vpvm = new ViewPublicationViewModel();
-                return Ok(vpvm.ToList(resultado));
+                return Ok(ViewPublicationViewModel.ToList(resultado));
             }
             return NotFound();
         }
@@ -48,12 +47,13 @@ namespace WhyNotRun.Controllers
         [Route("publication")]
         public async Task<IHttpActionResult> CreatePublication(CreatePublicationViewModel model)
         {
-            var resultado = await _publicationBo.CreatePublication(model.ToPublication());
-            if (resultado != null)
+            if (!ModelState.IsValid)
             {
-                return Ok(new ViewPublicationViewModel(resultado));
+                var errors = ModelState.Keys.Where(k => ModelState[k].Errors.Count > 0).Select(k => new { propertyName = k, errorMessage = ModelState[k].Errors[0].ErrorMessage });
+                return Ok(errors);
             }
-            return InternalServerError();
+            
+            return Ok(new ViewPublicationViewModel(await _publicationBo.CreatePublication(model.ToPublication())));
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace WhyNotRun.Controllers
                 return Ok(new ViewPublicationViewModel(await _publicationBo.SearchPublication(model.PublicationId.ToObjectId())));
             }
             return InternalServerError();
-        } 
+        }
 
         /// <summary>
         /// Adiciona um comentario a uma publicação
@@ -86,7 +86,7 @@ namespace WhyNotRun.Controllers
             {
                 return Ok(new ViewPublicationViewModel(await _publicationBo.SearchPublication(model.PublicationId.ToObjectId())));
             }
-            return InternalServerError();
+            return StatusCode((HttpStatusCode)422);
 
         }
 
@@ -101,8 +101,7 @@ namespace WhyNotRun.Controllers
             var result = await _publicationBo.SearchPublications(text);
             if (result != null)
             {
-                var vpvm = new ViewPublicationViewModel();
-                return Ok(vpvm.ToList(result));
+                return Ok(ViewPublicationViewModel.ToList(result));
             }
             return NotFound();
         }

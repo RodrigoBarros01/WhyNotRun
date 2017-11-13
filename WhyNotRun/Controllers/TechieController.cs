@@ -33,22 +33,22 @@ namespace WhyNotRun.Controllers
         }
 
         [HttpGet]
-        [Route("techie/techies")]
-        public async Task<IHttpActionResult> ListTechies()
+        [Route("techie")]
+        public async Task<IHttpActionResult> ListTechies(bool orderByName)
         {
-            var result = await _techieBo.ListTechiePerId();
+            var result = await _techieBo.ListTechie();
+
             if (result != null)
-            {
                 return Ok(result);
-            }
+            
             return NotFound();
         }
 
         [HttpGet]
         [Route("techie/order/name")]
-        public async Task<IHttpActionResult> OrderTechiePerId()
+        public async Task<IHttpActionResult> OrderTechiePerName()
         {
-            var result = await _techieBo.OrderTechiePerName();
+            var result = await _techieBo.ListTechieOrderByName();
             if (result != null)
             {
                 return Ok(result);
@@ -58,9 +58,9 @@ namespace WhyNotRun.Controllers
 
         [HttpGet]
         [Route("techie/amount")]
-        public async Task<IHttpActionResult> AmountPostsPorTechie(ObjectId techieId)
+        public async Task<IHttpActionResult> AmountPostsPerTechie(ObjectId techieId)
         {
-            var result = await _techieBo.AmountPostsPorTechie(techieId);
+            var result = await _techieBo.AmountPostsPerTechie(techieId);
             if (result >= 0)
             {
                 return Ok(result);
@@ -72,7 +72,7 @@ namespace WhyNotRun.Controllers
         [Route("techie/points")]
         public async Task<IHttpActionResult> PointsPublication()
         {
-            var result = await _techieBo.OrderTechiePerName();
+            var result = await _techieBo.ListTechieOrderByName();
             if (result != null)
             {
                 return Ok(result);

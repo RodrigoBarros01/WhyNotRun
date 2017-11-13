@@ -12,12 +12,10 @@ namespace WhyNotRun.Controllers
 {
     public class UserController : ApiController
     {
-        //private TokenBO _tokenBo;
         private UserBO _userBo;
 
         public UserController()
         {
-            //_tokenBo = new TokenBO();
             _userBo = new UserBO();
         }
 
@@ -25,12 +23,16 @@ namespace WhyNotRun.Controllers
         [Route("login")]
         public async Task<IHttpActionResult> Login(LoginViewModel loginViewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("");
+            }
             var user = await _userBo.Login(loginViewModel.Email, loginViewModel.Password);
             if (user != null)
             {
                 return Ok(user);
             }
-            return NotFound(); ;
+            return NotFound();
         }
 
         [HttpPost]
@@ -39,15 +41,10 @@ namespace WhyNotRun.Controllers
         public async Task<IHttpActionResult> CreateUser(CreateUserViewModel model)
         {
             var result = await _userBo.CreateUser(model.ToUser());
-            //var teste = await _userBo.ValidMailExists(result.Email, result.Id);
-            //if (teste != true)
-            //{
-                if (result != null)
-                {
-                    return Ok(result);
-                }
-            //}
-            //return Conflict();
+            if (result != null)
+            {
+                return Ok(result);
+            }
             return InternalServerError();
         }
     }

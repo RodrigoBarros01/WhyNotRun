@@ -224,6 +224,7 @@
     <Compile Include="Models\TechieViewModel\CreateTechieViewModel.cs" />
     <Compile Include="Models\Token.cs" />
     <Compile Include="Models\User.cs" />
+    <Compile Include="Models\UserViewModel\AuthenticatedViewModel.cs" />
     <Compile Include="Models\UserViewModel\CreateUserViewModel.cs" />
     <Compile Include="Models\UserViewModel\LoginViewModel.cs" />
     <Compile Include="Models\UserViewModel\VisualizationUserViewModel.cs" />

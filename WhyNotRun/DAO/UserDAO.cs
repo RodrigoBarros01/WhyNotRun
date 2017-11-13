@@ -17,22 +17,15 @@ namespace WhyNotRun.DAO
 
         }
 
-        public async Task<User> CreateUser(User user)
+        public async Task CreateUser(User user)
         {
             await Collection.InsertOneAsync(user);
-            return user;
         }
 
-        public async Task<bool> ValidEmailExists(string email, ObjectId? userId = null)
+        public async Task<bool> ValidEmailExists(string email)
         {
-            var filter = FilterBuilder.Eq(a => a.Id, userId)
-                & FilterBuilder.Eq(a => a.Email, email)
+            var filter = FilterBuilder.Eq(a => a.Email, email)
                 & FilterBuilder.Exists(a => a.DeletedAt, false);
-
-            if (userId.HasValue)
-            {
-                filter = filter & FilterBuilder.Ne(a => a.Id, userId.Value);
-            }
 
             return await Collection.Find(filter).FirstOrDefaultAsync() == null;
         }

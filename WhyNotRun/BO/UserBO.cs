@@ -24,12 +24,18 @@ namespace WhyNotRun.BO
         {
             user.Id = ObjectId.GenerateNewId();
             user.Password = user.Password;
-            return await _userDao.CreateUser(user);
+            var emailValid = await ValidMailExists(user.Email);
+            if (emailValid)
+            {
+                await _userDao.CreateUser(user);
+                return user;
+            }
+            return null;
         }
 
-        public async Task<bool> ValidMailExists(string email, ObjectId? userId = null)
+        public async Task<bool> ValidMailExists(string email)
         {
-            return await _userDao.ValidEmailExists(email, userId);
+            return await _userDao.ValidEmailExists(email);
         }
 
         public async Task<User> SearchUserPerId(ObjectId id)

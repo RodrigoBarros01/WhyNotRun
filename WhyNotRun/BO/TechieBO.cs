@@ -23,7 +23,8 @@ namespace WhyNotRun.BO
         public async Task<Techie> CreateTechie(Techie techie)
         {
             techie.Id = ObjectId.GenerateNewId();
-            return await _techieDao.CreateTechie(techie);
+            await _techieDao.CreateTechie(techie);
+            return techie;
         }
 
         public async Task<Techie> SearchTechie(ObjectId id)
@@ -31,12 +32,12 @@ namespace WhyNotRun.BO
             return await _techieDao.SearchTechiePerId(id);
         }
 
-        public async Task<List<Techie>> ListTechiePerId()
+        public async Task<List<Techie>> ListTechie()
         {
             return await _techieDao.ListTechies();
         }
 
-        public async Task<List<Techie>> OrderTechiePerName()
+        public async Task<List<Techie>> ListTechieOrderByName()
         {
             var list = await _techieDao.ListTechies();
             var order = list.OrderBy(a => a.Name).ToList();
@@ -56,13 +57,10 @@ namespace WhyNotRun.BO
             return pontos;
         }
 
-        public async Task<int> AmountPostsPorTechie(ObjectId techieId)
+        public async Task<int> AmountPostsPerTechie(ObjectId techieId)
         {
             var list = (await _publicationBo.ListPublications()).Where(a => a.Techies.Contains(techieId));
-            return Convert.ToInt32(list.Count());
-
+            return list.Count();
         }
-
-
     }
 }
