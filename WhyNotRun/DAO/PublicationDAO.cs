@@ -1,4 +1,6 @@
 ﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
@@ -21,13 +23,23 @@ namespace WhyNotRun.DAO
         /// Lista todas as publicações
         /// </summary>
         /// <returns>Lista de publicações</returns>
-        public async Task<List<Publication>> ListPublications(int pagina)
+        public async Task<List<Publication>> ListPublications(int page)
         {
             var filter = FilterBuilder.Exists(a => a.DeletedAt, false);
             var sort = SortBuilder.Descending(a => a.DateCreation);
+            var projection = ProjectionBuilder.Slice(a => a.Comments, 0, 3);
 
-            return await Collection.Find(filter).Sort(sort).Skip((pagina - 1) * UtilBO.QUANTIDADE_PAGINAS).Limit(UtilBO.QUANTIDADE_PAGINAS).ToListAsync();
+
+            return await Collection
+                .Find(filter)
+                .Sort(sort)
+                .Skip((page - 1) * UtilBO.QUANTIDADE_PAGINAS)
+                .Limit(UtilBO.QUANTIDADE_PAGINAS)
+                .Project<Publication>(projection)
+                .ToListAsync();
         }
+
+
 
         /// <summary>
         /// Cria uma publicação
@@ -92,6 +104,58 @@ namespace WhyNotRun.DAO
 
             return resultado.IsModifiedCountAvailable && resultado.IsAcknowledged && resultado.ModifiedCount == 1;
 
+        }
+
+        public async Task<List<Comment>> SeeMoreComments(ObjectId publicationId, ObjectId lastCommentId, int limit)
+        {
+
+            var match = new BsonDocument
+            {
+                {
+                    "deletedAt",
+                    new BsonDocument {
+                        { "$exists", false}
+                    }
+                },
+                {
+                    "_id",
+                    publicationId
+                }
+            };
+
+            var projection = new BsonDocument
+            {
+                {"comments", 1 },
+                {"_id", 0 }
+            };
+
+            var mathComments = new BsonDocument
+            {
+                {
+                    "comments._id",
+                    new BsonDocument
+                    {
+                        {"$lt", lastCommentId }
+                    }
+                }
+            };
+
+            var result = await 
+                Collection
+                .Aggregate()
+                .Match(match)
+                .Unwind(a => a.Comments)
+                .Project(projection)
+                .Match(mathComments)
+                .Limit(limit)
+                .ToListAsync();
+
+            List<Comment> comentarios = new List<Comment>();
+            foreach (var item in result)
+            {
+                comentarios.Add(BsonSerializer.Deserialize<Comment>(item["comments"].AsBsonDocument));
+            }
+            return comentarios.ToList();
         }
 
         ///// <summary>

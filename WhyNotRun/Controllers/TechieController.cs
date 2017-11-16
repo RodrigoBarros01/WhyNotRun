@@ -21,7 +21,7 @@ namespace WhyNotRun.Controllers
         }
 
         [HttpPost]
-        [Route("techie")]
+        [Route("techies")]
         public async Task<IHttpActionResult> CreateTechie(CreateTechieViewModel model)
         {
             var result = await _techieBo.CreateTechie(model.ToTechie());
@@ -33,7 +33,7 @@ namespace WhyNotRun.Controllers
         }
 
         [HttpGet]
-        [Route("techie")]
+        [Route("techies")]
         public async Task<IHttpActionResult> ListTechies(bool orderByName)
         {
             var result = await _techieBo.ListTechie();
@@ -45,7 +45,7 @@ namespace WhyNotRun.Controllers
         }
 
         [HttpGet]
-        [Route("techie/order/name")]
+        [Route("techies/order/name")]
         public async Task<IHttpActionResult> OrderTechiePerName()
         {
             var result = await _techieBo.ListTechieOrderByName();
@@ -56,20 +56,20 @@ namespace WhyNotRun.Controllers
             return NotFound();
         }
 
-        [HttpGet]
-        [Route("techie/amount")]
-        public async Task<IHttpActionResult> AmountPostsPerTechie(ObjectId techieId)
-        {
-            var result = await _techieBo.AmountPostsPerTechie(techieId);
-            if (result >= 0)
-            {
-                return Ok(result);
-            }
-            return InternalServerError();
-        }
+        //[HttpGet]
+        //[Route("techie/amount")]
+        //public async Task<IHttpActionResult> AmountPostsPerTechie(ObjectId techieId)
+        //{
+        //    var result = await _techieBo.AmountPostsPerTechie(techieId);
+        //    if (result >= 0)
+        //    {
+        //        return Ok(result);
+        //    }
+        //    return InternalServerError();
+        //}
 
         [HttpGet]
-        [Route("techie/points")]
+        [Route("techies/points")]
         public async Task<IHttpActionResult> PointsPublication()
         {
             var result = await _techieBo.ListTechieOrderByName();

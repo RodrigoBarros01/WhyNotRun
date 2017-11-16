@@ -1,35 +1,44 @@
 ﻿using MongoDB.Bson;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using WhyNotRun.BO;
+using WhyNotRun.Models.TechieViewModel;
 
 namespace WhyNotRun.Models.PublicationViewModel
 {
     public class ViewPublicationViewModel
     {
+        [JsonProperty(PropertyName = "id")]
         public ObjectId Id { get; set; }
-        
+
+        [JsonProperty(PropertyName = "title")]
         public string Title { get; set; }
-        
+
+        [JsonProperty(PropertyName = "description")]
         public string Description { get; set; }
         
-        public List<string> Techies { get; set; }
-        
+        [JsonProperty(PropertyName = "techies")]
+        public List<ViewTechieViewModel> Techies { get; set; }
+        //public List<string> Techies { get; set; }
+
+        [JsonProperty(PropertyName = "username")]
         public string UserName { get; set; }
+        [JsonProperty(PropertyName = "userpicture")]
         public string UserPicture { get; set; }
+        [JsonProperty(PropertyName = "userprofession")]
         public string UserProfession { get; set; }
-        
+
+        [JsonProperty(PropertyName = "comments")]
         public List<Comment> Comments { get; set; }
 
+        [JsonProperty(PropertyName = "points")]
         public int Points { get; set; }
- 
-        //public List<ObjectId> Likes { get; set; }
 
-        //public List<ObjectId> Dislikes { get; set; }
-
+        [JsonProperty(PropertyName = "datecreation")]
         public DateTime DateCreation { get; set; }
 
         public ViewPublicationViewModel(Publication publication)
@@ -43,14 +52,17 @@ namespace WhyNotRun.Models.PublicationViewModel
 
             #region Pega tecnologias
 
-            var techieBo = new TechieBO();
-            foreach (var tecId in publication.Techies)
+            if (publication.Techies.Count > 0)
             {
-                Task.Run(async () =>
-                {
-                    Techies.Add((await techieBo.SearchTechie(tecId)).Name);
+                this.Techies = new List<ViewTechieViewModel>();
+                List<Task<Techie>> tasks = new List<Task<Techie>>();
 
-                }).Wait();
+                var techieBo = new TechieBO();
+                foreach (var tecId in publication.Techies)
+                    tasks.Add(Task.Run(() => techieBo.SearchTechie(tecId)));
+
+                Task.WaitAll(tasks.ToArray());
+                Parallel.ForEach(tasks, task => Techies.Add(new ViewTechieViewModel(task.Result)));
             }
 
             #endregion
@@ -62,7 +74,7 @@ namespace WhyNotRun.Models.PublicationViewModel
             Task.Run(async () =>
             {
                 var user = await userBo.SearchUserPerId(publication.UserId);
-                if(user != null)
+                if (user != null)
                 {
                     UserName = user.Name;
                     UserPicture = user.Picture;
@@ -73,8 +85,7 @@ namespace WhyNotRun.Models.PublicationViewModel
             #endregion
 
             Comments = publication.Comments;
-            //Likes = publication.Likes;
-            //Dislikes = publication.Dislikes;
+
             DateCreation = publication.DateCreation;
 
         }

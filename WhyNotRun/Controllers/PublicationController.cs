@@ -28,15 +28,20 @@ namespace WhyNotRun.Controllers
         /// <returns>Lista de publicações</returns>
         [HttpGet]
         [Route("publications")]
-        public async Task<IHttpActionResult> ListPublications()
+        public async Task<IHttpActionResult> ListPublications(int page)
         {
-            var resultado = await _publicationBo.ListPublications();
+            var resultado = await _publicationBo.ListPublications(page);
             if (resultado != null)
             {
                 return Ok(ViewPublicationViewModel.ToList(resultado));
             }
             return NotFound(); //mudar isso
         }
+
+        
+
+
+
 
         /// <summary>
         /// Cadastrar publicação
@@ -47,13 +52,13 @@ namespace WhyNotRun.Controllers
         [Route("publications")]
         public async Task<IHttpActionResult> CreatePublication(CreatePublicationViewModel model)
         {
-            if (!ModelState.IsValid)
+            var resultado = await _publicationBo.CreatePublication(model.ToPublication());
+            if (resultado != null)
             {
-                var errors = ModelState.Keys.Where(k => ModelState[k].Errors.Count > 0).Select(k => new { propertyName = k, errorMessage = ModelState[k].Errors[0].ErrorMessage });
-                return Ok(errors);
+                return Ok(new ViewPublicationViewModel(resultado));
             }
-            
-            return Ok(new ViewPublicationViewModel(await _publicationBo.CreatePublication(model.ToPublication())));
+            return StatusCode((HttpStatusCode)422);
+
         }
 
         /// <summary>
@@ -90,21 +95,34 @@ namespace WhyNotRun.Controllers
 
         }
 
+        [HttpGet]
+        [Route("comments")]
+        public async Task<IHttpActionResult> SeeMoreComments(string publicationId, string lastcommentId, int limit)
+        {
+            var result = await _publicationBo.SeeMoreComments(publicationId.ToObjectId(), lastcommentId.ToObjectId(), limit);
+            if (result != null)
+            {
+                return Ok(result);
+            }
+            return NotFound();
+        }
+
+
         /// <summary>
         /// Busca publicações com base em uma palavra chave
         /// </summary>
         /// <param name="text"></param>
-        [HttpGet]
-        [Route("publications/{text}")]
-        public async Task<IHttpActionResult> SearchPublications(string text)
-        {
-            var result = await _publicationBo.SearchPublications(text);
-            if (result != null)
-            {
-                return Ok(ViewPublicationViewModel.ToList(result));
-            }
-            return NotFound();
-        }
+        //[HttpGet]
+        //[Route("publications/{text}")]
+        //public async Task<IHttpActionResult> SearchPublications(string text)
+        //{
+        //    var result = await _publicationBo.SearchPublications(text);
+        //    if (result != null)
+        //    {
+        //        return Ok(ViewPublicationViewModel.ToList(result));
+        //    }
+        //    return NotFound();
+        //}
 
 
 

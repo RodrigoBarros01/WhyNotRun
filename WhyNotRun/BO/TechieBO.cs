@@ -44,23 +44,23 @@ namespace WhyNotRun.BO
             return order;
         }
 
-        public async Task<int> PointsPublication(ObjectId techieId)
-        {
-            var list = (await _publicationBo.ListPublications()).Where(a => a.Techies.Contains(techieId));
-            int pontos = 0;
+        //public async Task<int> PointsPublication(ObjectId techieId)
+        //{
+        //    var list = (await _publicationBo.ListPublications()).Where(a => a.Techies.Contains(techieId));
+        //    int pontos = 0;
 
-            foreach (var item in list)
-            {
-                pontos += item.Likes.Count - item.Dislikes.Count;
-            }
+        //    foreach (var item in list)
+        //    {
+        //        pontos += item.Likes.Count - item.Dislikes.Count;
+        //    }
 
-            return pontos;
-        }
+        //    return pontos;
+        //}
 
-        public async Task<int> AmountPostsPerTechie(ObjectId techieId)
-        {
-            var list = (await _publicationBo.ListPublications()).Where(a => a.Techies.Contains(techieId));
-            return list.Count();
-        }
+        //public async Task<int> AmountPostsPerTechie(ObjectId techieId)
+        //{
+        //    var list = (await _publicationBo.ListPublications()).Where(a => a.Techies.Contains(techieId));
+        //    return list.Count();
+        //}
     }
 }

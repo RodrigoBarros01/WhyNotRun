@@ -26,10 +26,14 @@ namespace WhyNotRun.Models.PublicationViewModel
         public Publication ToPublication()
         {
             List<ObjectId> techiesId = new List<ObjectId>();
-            foreach (var id in Techies)
+            if (Techies.Count > 0)
             {
-                techiesId.Add(id.ToObjectId());
+                foreach (var id in Techies)
+                {
+                    techiesId.Add(id.ToObjectId());
+                }
             }
+            
             
             return new Publication
             {

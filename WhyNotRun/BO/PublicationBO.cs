@@ -24,9 +24,9 @@ namespace WhyNotRun.BO
         /// Listar publicações
         /// </summary>
         /// <returns>Lista de publicações</returns>
-        public async Task<List<Publication>> ListPublications()
+        public async Task<List<Publication>> ListPublications(int pagina)
         {
-            return await _publicationDao.ListPublications(1);
+            return await _publicationDao.ListPublications(pagina);
         }
 
         /// <summary>
@@ -97,13 +97,22 @@ namespace WhyNotRun.BO
             return await _publicationDao.AddComment(comment, publicationId);
         }
         
-        //rever esse metodo
-        public async Task<List<Publication>> SearchPublications(string textToSearch)
+
+        public async Task<List<Comment>> SeeMoreComments(ObjectId publicationId, ObjectId lastCommentId, int limit)
         {
-            var publications = (await ListPublications()).Where(a => a.Title.Contains(textToSearch) || a.Description.Contains(textToSearch)).ToList();
-            
-            return publications;
+            return await _publicationDao.SeeMoreComments(publicationId, lastCommentId, limit);
         }
+
+
+
+
+        //rever esse metodo
+        //public async Task<List<Publication>> SearchPublications(string textToSearch)
+        //{
+        //    var publications = (await ListPublications()).Where(a => a.Title.Contains(textToSearch) || a.Description.Contains(textToSearch)).ToList();
+            
+        //    return publications;
+        //}
 
 
     }

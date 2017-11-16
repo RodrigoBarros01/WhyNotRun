@@ -44,6 +44,14 @@ namespace WhyNotRun.DAO
             }
         }
 
+        protected ProjectionDefinitionBuilder<T> ProjectionBuilder
+        {
+            get
+            {
+                return Builders<T>.Projection;
+            }
+        }
+
         protected IMongoCollection<T> Collection
         {
             get
