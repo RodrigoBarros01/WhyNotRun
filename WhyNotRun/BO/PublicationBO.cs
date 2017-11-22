@@ -13,11 +13,13 @@ namespace WhyNotRun.BO
     {
         private PublicationDAO _publicationDao;
         private UserBO _userBo;
+        private TechieBO _techieBo;
 
         public PublicationBO()
         {
             _publicationDao = new PublicationDAO();
             _userBo = new UserBO();
+            _techieBo = new TechieBO();
         }
 
         /// <summary>
@@ -88,7 +90,7 @@ namespace WhyNotRun.BO
         {
             comment.Id = ObjectId.GenerateNewId();
             comment.DateCreation = DateTime.Now;
-            
+
             var user = await _userBo.SearchUserPerId(comment.UserId);
             comment.UserName = user.Name;
             comment.UserPicture = user.Picture;
@@ -96,23 +98,37 @@ namespace WhyNotRun.BO
 
             return await _publicationDao.AddComment(comment, publicationId);
         }
-        
 
+        /// <summary>
+        /// Retorna mais comentarios de uma publicação especifica
+        /// </summary>
+        /// <param name="publicationId">Id da publicação</param>
+        /// <param name="lastCommentId">Id do comentario a ser usado de base para listagem dos proximos</param>
+        /// <param name="limit">quantidade a ser carregada</param>
+        /// <returns></returns>
         public async Task<List<Comment>> SeeMoreComments(ObjectId publicationId, ObjectId lastCommentId, int limit)
         {
             return await _publicationDao.SeeMoreComments(publicationId, lastCommentId, limit);
         }
 
+        /// <summary>
+        /// Busca publicações por uma palavra chave
+        /// </summary>
+        /// <param name="text">palavra chave</param>
+        /// <param name="page">pagina para paginação</param>
+        /// <returns></returns>
+        public async Task<List<Publication>> SearchPublications(string text, int page)
+        {
+            List<ObjectId> techiesId = new List<ObjectId>();
+            foreach (var techie in (await _techieBo.SearchTechiesPerName(text)))
+            {
+                techiesId.Add(techie.Id);
+            }
 
 
+            return await _publicationDao.SearchPublications(text, techiesId, page);
+        }
 
-        //rever esse metodo
-        //public async Task<List<Publication>> SearchPublications(string textToSearch)
-        //{
-        //    var publications = (await ListPublications()).Where(a => a.Title.Contains(textToSearch) || a.Description.Contains(textToSearch)).ToList();
-            
-        //    return publications;
-        //}
 
 
     }

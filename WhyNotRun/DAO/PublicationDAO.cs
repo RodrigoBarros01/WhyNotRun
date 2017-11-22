@@ -5,6 +5,7 @@ using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using WhyNotRun.BO;
@@ -39,6 +40,24 @@ namespace WhyNotRun.DAO
                 .ToListAsync();
         }
 
+        public async Task<List<Publication>> SearchPublications(string text, List<ObjectId> techiesId, int page)
+        {
+            var filter = FilterBuilder.Regex(a => a.Title, BsonRegularExpression.Create(new Regex(text, RegexOptions.IgnoreCase))) 
+                | FilterBuilder.Regex(a => a.Description, BsonRegularExpression.Create(new Regex(text, RegexOptions.IgnoreCase))) 
+                | FilterBuilder.AnyIn(a => a.Techies, techiesId)
+                & FilterBuilder.Exists(a => a.DeletedAt, false);
+
+            var sort = SortBuilder.Descending(a => a.DateCreation);
+            var projection = ProjectionBuilder.Slice(a => a.Comments, 0, 3);
+
+            return await Collection
+                .Find(filter)
+                .Sort(sort)
+                .Skip((page - 1) * UtilBO.QUANTIDADE_PAGINAS)
+                .Limit(UtilBO.QUANTIDADE_PAGINAS)
+                .Project<Publication>(projection)
+                .ToListAsync();
+        }
 
 
 
@@ -159,10 +178,7 @@ namespace WhyNotRun.DAO
             }
             return comentarios.ToList();
         }
-
-        //
         
-
 
     }
 }
