@@ -107,21 +107,21 @@ namespace WhyNotRun.Controllers
         }
 
 
-        /// <summary>
-        /// Busca publicações com base em uma palavra chave
-        /// </summary>
-        /// <param name="text"></param>
-        //[HttpGet]
-        //[Route("publications/{text}")]
-        //public async Task<IHttpActionResult> SearchPublications(string text)
-        //{
-        //    var result = await _publicationBo.SearchPublications(text);
-        //    if (result != null)
-        //    {
-        //        return Ok(ViewPublicationViewModel.ToList(result));
-        //    }
-        //    return NotFound();
-        //}
+       /// <summary>
+       /// Busca publicações com base em uma palavra chave
+       /// </summary>
+       /// <param name="text"></param>
+       [HttpGet]
+       [Route("publications")]
+       public async Task<IHttpActionResult> SearchPublications(string text, int page)
+       {
+           var result = await _publicationBo.SearchPublications(text, page);
+           if (result != null)
+           {
+               return Ok(ViewPublicationViewModel.ToList(result));
+           }
+           return NotFound();
+       }
 
 
 

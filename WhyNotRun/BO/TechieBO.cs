@@ -12,12 +12,10 @@ namespace WhyNotRun.BO
     public class TechieBO
     {
         private TechieDAO _techieDao;
-        private PublicationBO _publicationBo;
 
         public TechieBO()
         {
             _techieDao = new TechieDAO();
-            _publicationBo = new PublicationBO();
         }
 
         public async Task<Techie> CreateTechie(Techie techie)
@@ -31,6 +29,18 @@ namespace WhyNotRun.BO
         {
             return await _techieDao.SearchTechiePerId(id);
         }
+
+        public async Task<Techie> SearchTechiePerName(string name)
+        {
+            return await _techieDao.SearchTechiePerName(name);
+        }
+
+        public async Task<List<Techie>> SearchTechiesPerName(string name)
+        {
+            return await _techieDao.SearchTechiesPerName(name);
+        }
+
+
 
         public async Task<List<Techie>> ListTechie()
         {
