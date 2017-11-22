@@ -211,6 +211,7 @@
     <Compile Include="DAO\PublicationDAO.cs" />
     <Compile Include="DAO\TechieDAO.cs" />
     <Compile Include="DAO\UserDAO.cs" />
+    <Compile Include="Filters\WhyNotRunJwtAuthAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

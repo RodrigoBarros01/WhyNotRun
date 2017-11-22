@@ -30,7 +30,7 @@ namespace WhyNotRun.Controllers
             var user = await _userBo.Login(loginViewModel.Email, loginViewModel.Password);
             if (user != null)
             {
-                return Ok(user);
+                return Ok(new AuthenticatedViewModel(user));
             }
             return NotFound();
         }

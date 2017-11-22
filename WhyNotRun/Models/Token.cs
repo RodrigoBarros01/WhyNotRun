@@ -10,24 +10,14 @@ namespace WhyNotRun.Models
 {
     public class Token
     {
-        private string GenerateSecret(string id, string email)
-        {
-            byte[] b = System.Text.ASCIIEncoding.ASCII.GetBytes($"{DateTime.Now.Day.ToString() + id + email}");
-            string secret = Convert.ToBase64String(b);
-            return secret + "RTZljcvklaKKKJ";
-        }
+        private const string secret = "AJKNbbehjfbqewbhfkibhjfehjbHABHEFBBQHWFEfjewhnqjfbewqhfjbKQNEWFBQEWFJkjbqwhfjbqewbhfQJAESWHBFBQEWFkkkkj";
 
-
-        public string GenerateToken(string id, string email)
+        public string GenerateToken(string id)
         {
             var payload = new Dictionary<string, object>
             {
-                { "id", id },
-                { "email", email }
+                { "id", id }
             };
-
-            var secret = GenerateSecret(id, email);
-
 
             IJwtAlgorithm algorithm = new HMACSHA256Algorithm();
             IJsonSerializer serializer = new JsonNetSerializer();
@@ -38,9 +28,8 @@ namespace WhyNotRun.Models
             return token;
         }
 
-        public string DecodeToken(string token, string secret)
+        public string DecodeToken(string token)
         {
-            
             try
             {
                 IJsonSerializer serializer = new JsonNetSerializer();

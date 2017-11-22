@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using WhyNotRun.BO;
+using WhyNotRun.Filters;
 using WhyNotRun.Models.CommentViewModel;
 using WhyNotRun.Models.PublicationViewModel;
 
@@ -37,11 +38,7 @@ namespace WhyNotRun.Controllers
             }
             return NotFound(); //mudar isso
         }
-
         
-
-
-
 
         /// <summary>
         /// Cadastrar publicação
@@ -50,6 +47,7 @@ namespace WhyNotRun.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("publications")]
+        [WhyNotRunJwtAuth]
         public async Task<IHttpActionResult> CreatePublication(CreatePublicationViewModel model)
         {
             var resultado = await _publicationBo.CreatePublication(model.ToPublication());
@@ -58,7 +56,6 @@ namespace WhyNotRun.Controllers
                 return Ok(new ViewPublicationViewModel(resultado));
             }
             return StatusCode((HttpStatusCode)422);
-
         }
 
         /// <summary>
@@ -67,6 +64,7 @@ namespace WhyNotRun.Controllers
         /// <param name="model">dados da publicação reagida</param>
         [HttpPatch]
         [Route("publications/{id}/react")]
+        [WhyNotRunJwtAuth]
         public async Task<IHttpActionResult> React(string id, ReactPublicationViewModel model)
         {
             var resultado = await _publicationBo.React(model.UserId.ToObjectId(), id.ToObjectId(), model.Like);
@@ -84,6 +82,7 @@ namespace WhyNotRun.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("comments")]
+        [WhyNotRunJwtAuth]
         public async Task<IHttpActionResult> AddComment(AddCommentViewModel model)
         {
             var resultado = await _publicationBo.AddComment(model.ToComment(), model.PublicationId.ToObjectId());

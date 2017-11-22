@@ -23,7 +23,7 @@ namespace WhyNotRun.BO
         public async Task<User> CreateUser(User user)
         {
             user.Id = ObjectId.GenerateNewId();
-            user.Password = user.Password;
+            user.Password = user.Password.Encript();
             var emailValid = await ValidMailExists(user.Email);
             if (emailValid)
             {
@@ -45,7 +45,7 @@ namespace WhyNotRun.BO
 
         public async Task<User> Login(string email, string password)
         {
-            var user = await _userDao.Login(email, password);
+            var user = await _userDao.Login(email, password.Encript());
             if (user != null)
             {
                 return await SearchUserPerId(user.Id);

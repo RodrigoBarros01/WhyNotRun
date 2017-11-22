@@ -41,6 +41,8 @@ namespace WhyNotRun.DAO
 
 
 
+
+
         /// <summary>
         /// Cria uma publicação
         /// </summary>
@@ -158,16 +160,7 @@ namespace WhyNotRun.DAO
             return comentarios.ToList();
         }
 
-        ///// <summary>
-        ///// Procura uma lista de publicações
-        ///// </summary>
-        ///// <param name="ids"></param>
-        ///// <returns></returns>
-        //public async Task<List<Publication>> SearchPublications(List<ObjectId> ids)
-        //{
-        //    var filter = FilterBuilder.Exists(a => a.DeletedAt, false) & FilterBuilder.In(a => a.Id, ids);
-        //    return await Collection.Find(filter).ToListAsync();
-        //}
+        
 
 
     }
