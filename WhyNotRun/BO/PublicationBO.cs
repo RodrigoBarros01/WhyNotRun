@@ -49,7 +49,7 @@ namespace WhyNotRun.BO
         /// Busca uma publicação por id
         /// </summary>
         /// <param name="publicationId">publicação a ser buscada</param>
-        public async Task<Publication> SearchPublication(ObjectId publicationId)
+        public async Task<Publication> SearchPublicationById(ObjectId publicationId)
         {
             return await _publicationDao.SearchPublicationById(publicationId);
         }
@@ -62,7 +62,7 @@ namespace WhyNotRun.BO
         /// <param name="like">Reação (like = true, dislike = false)</param>
         public async Task<bool> React(ObjectId userId, ObjectId publicationId, bool like)
         {
-            var publicacao = await SearchPublication(publicationId);
+            var publicacao = await SearchPublicationById(publicationId);
             if (like)
             {
                 if (publicacao.Likes.Contains(userId))

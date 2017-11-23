@@ -40,6 +40,13 @@ namespace WhyNotRun.DAO
                 .ToListAsync();
         }
 
+        /// <summary>
+        /// Busca publicações com base em uma palavra chave
+        /// </summary>
+        /// <param name="text">palavra chave</param>
+        /// <param name="techiesId">Lista de tecnologias que a palavra chave se encaixa no nome</param>
+        /// <param name="page">numero da pagina para paginação</param>
+        /// <returns></returns>
         public async Task<List<Publication>> SearchPublications(string text, List<ObjectId> techiesId, int page)
         {
             var filter = FilterBuilder.Regex(a => a.Title, BsonRegularExpression.Create(new Regex(text, RegexOptions.IgnoreCase))) 
@@ -58,10 +65,7 @@ namespace WhyNotRun.DAO
                 .Project<Publication>(projection)
                 .ToListAsync();
         }
-
-
-
-
+        
         /// <summary>
         /// Cria uma publicação
         /// </summary>
@@ -127,6 +131,13 @@ namespace WhyNotRun.DAO
 
         }
 
+        /// <summary>
+        /// Retorna mais comentarios de uma publicação especifica
+        /// </summary>
+        /// <param name="publicationId">Id da publicação</param>
+        /// <param name="lastCommentId">Id do comentario a ser usado de base para listagem dos proximos</param>
+        /// <param name="limit">quantidade a ser carregada</param>
+        /// <returns></returns>
         public async Task<List<Comment>> SeeMoreComments(ObjectId publicationId, ObjectId lastCommentId, int limit)
         {
 

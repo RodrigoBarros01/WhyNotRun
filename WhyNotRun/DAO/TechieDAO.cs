@@ -40,6 +40,11 @@ namespace WhyNotRun.DAO
             return result;
         }
 
+        /// <summary>
+        /// Busca uma tecnologia por nome
+        /// </summary>
+        /// <param name="name">texto a ser procurado</param>
+        /// <returns></returns>
         public async Task<Techie> SearchTechiePerName(string name)
         {
             var filter = FilterBuilder.Eq(a => a.Name, name)
@@ -47,6 +52,11 @@ namespace WhyNotRun.DAO
             return await Collection.Find(filter).FirstOrDefaultAsync();
         }
 
+        /// <summary>
+        /// Busca uma lista de tecnologias que o nome seja parecido com o texto digitado 
+        /// </summary>
+        /// <param name="name">texto a ser procurado</param>
+        /// <returns></returns>
         public async Task<List<Techie>> SearchTechiesPerName(string name)
         {
             var filter = FilterBuilder.Regex(a => a.Name, BsonRegularExpression.Create(new Regex(name, RegexOptions.IgnoreCase)))
