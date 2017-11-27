@@ -112,8 +112,7 @@ namespace WhyNotRun.Controllers
             }
             return NotFound();
         }
-
-
+        
         /// <summary>
         /// Busca publicações com base em uma palavra chave
         /// </summary>
@@ -129,8 +128,7 @@ namespace WhyNotRun.Controllers
             }
             return NotFound();
         }
-
-
+        
         /// <summary>
         /// Busca uma publicação por ID
         /// </summary>
@@ -148,6 +146,24 @@ namespace WhyNotRun.Controllers
             return NotFound();
         }
 
+        /// <summary>
+        /// Sugere uma publicação para o usuario com base em uma palavra chave
+        /// </summary>
+        /// <param name="text">palavra chave</param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("publications")]
+        public async Task<IHttpActionResult> SugestPublication(string text)
+        {
+            var result = await _publicationBo.SugestPublication(text);
+
+            if (result != null)
+            {
+                return Ok(SugestPublicationViewModel.ToList(result));
+            }
+            return NotFound();
+        }
+        
 
     }
 }

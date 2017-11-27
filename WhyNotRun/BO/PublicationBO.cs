@@ -55,6 +55,16 @@ namespace WhyNotRun.BO
         }
 
         /// <summary>
+        /// Busca uma lista de publicações baseado nos id's
+        /// </summary>
+        /// <param name="ids">id's das publicações a serem buscadas</param>
+        /// <returns></returns>
+        public async Task<List<Publication>> SearchPublicationsByIds(List<ObjectId> ids)
+        {
+            return await _publicationDao.SearchPublicationsByIds(ids);
+        }
+        
+        /// <summary>
         /// Reage a uma publicação
         /// </summary>
         /// <param name="userId">Usuario que reagiu</param>
@@ -129,7 +139,21 @@ namespace WhyNotRun.BO
             return await _publicationDao.SearchPublications(text, techiesId, page);
         }
 
+        /// <summary>
+        /// Sugere uma publicação para o usuario com base em uma palavra chave
+        /// </summary>
+        /// <param name="text">palavra chave</param>
+        /// <returns></returns>
+        public async Task<List<Publication>> SugestPublication(string text)
+        {
+            List<ObjectId> techiesId = new List<ObjectId>();
+            foreach (var techie in (await _techieBo.SearchTechiesPerName(text)))
+            {
+                techiesId.Add(techie.Id);
+            }
 
-
+            return await SearchPublicationsByIds((await _publicationDao.SugestPublication(text, techiesId)));
+        }
+        
     }
 }
