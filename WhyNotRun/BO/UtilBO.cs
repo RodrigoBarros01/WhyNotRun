@@ -50,5 +50,10 @@ namespace WhyNotRun.BO
             }
         }
         
+        //public static string SaveImage()
+        //{
+            
+        //}
+
     }
 }

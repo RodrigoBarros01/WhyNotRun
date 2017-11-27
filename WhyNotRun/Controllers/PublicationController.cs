@@ -38,7 +38,7 @@ namespace WhyNotRun.Controllers
             }
             return NotFound(); //mudar isso
         }
-        
+
 
         /// <summary>
         /// Cadastrar publicação
@@ -70,7 +70,7 @@ namespace WhyNotRun.Controllers
             var resultado = await _publicationBo.React(model.UserId.ToObjectId(), id.ToObjectId(), model.Like);
             if (resultado)
             {
-                return Ok(new ViewPublicationViewModel(await _publicationBo.SearchPublication(id.ToObjectId())));
+                return Ok(new ViewPublicationViewModel(await _publicationBo.SearchPublicationById(id.ToObjectId())));
             }
             return InternalServerError();
         }
@@ -88,12 +88,19 @@ namespace WhyNotRun.Controllers
             var resultado = await _publicationBo.AddComment(model.ToComment(), model.PublicationId.ToObjectId());
             if (resultado)
             {
-                return Ok(new ViewPublicationViewModel(await _publicationBo.SearchPublication(model.PublicationId.ToObjectId())));
+                return Ok(new ViewPublicationViewModel(await _publicationBo.SearchPublicationById(model.PublicationId.ToObjectId())));
             }
             return StatusCode((HttpStatusCode)422);
 
         }
 
+        /// <summary>
+        /// Retorna mais comentarios de uma publicação especifica
+        /// </summary>
+        /// <param name="publicationId">Id da publicação</param>
+        /// <param name="lastCommentId">Id do comentario a ser usado de base para listagem dos proximos</param>
+        /// <param name="limit">quantidade a ser carregada</param>
+        /// <returns></returns>
         [HttpGet]
         [Route("comments")]
         public async Task<IHttpActionResult> SeeMoreComments(string publicationId, string lastcommentId, int limit)
@@ -105,25 +112,58 @@ namespace WhyNotRun.Controllers
             }
             return NotFound();
         }
+        
+        /// <summary>
+        /// Busca publicações com base em uma palavra chave
+        /// </summary>
+        /// <param name="text"></param>
+        [HttpGet]
+        [Route("publications")]
+        public async Task<IHttpActionResult> SearchPublications(string text, int page)
+        {
+            var result = await _publicationBo.SearchPublications(text, page);
+            if (result != null)
+            {
+                return Ok(ViewPublicationViewModel.ToList(result));
+            }
+            return NotFound();
+        }
+        
+        /// <summary>
+        /// Busca uma publicação por ID
+        /// </summary>
+        /// <param name="publicationId">ID da publicação a ser buscada</param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("publications")]
+        public async Task<IHttpActionResult> SearchPublicationById(string publicationId)
+        {
+            var result = await _publicationBo.SearchPublicationById(publicationId.ToObjectId());
+            if (result != null)
+            {
+                return Ok(new ViewPublicationViewModel(result));
+            }
+            return NotFound();
+        }
 
+        /// <summary>
+        /// Sugere uma publicação para o usuario com base em uma palavra chave
+        /// </summary>
+        /// <param name="text">palavra chave</param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("publications")]
+        public async Task<IHttpActionResult> SugestPublication(string text)
+        {
+            var result = await _publicationBo.SugestPublication(text);
 
-       /// <summary>
-       /// Busca publicações com base em uma palavra chave
-       /// </summary>
-       /// <param name="text"></param>
-       [HttpGet]
-       [Route("publications")]
-       public async Task<IHttpActionResult> SearchPublications(string text, int page)
-       {
-           var result = await _publicationBo.SearchPublications(text, page);
-           if (result != null)
-           {
-               return Ok(ViewPublicationViewModel.ToList(result));
-           }
-           return NotFound();
-       }
-
-
+            if (result != null)
+            {
+                return Ok(SugestPublicationViewModel.ToList(result));
+            }
+            return NotFound();
+        }
+        
 
     }
 }
