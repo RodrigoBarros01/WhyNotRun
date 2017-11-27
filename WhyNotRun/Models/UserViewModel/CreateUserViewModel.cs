@@ -22,6 +22,7 @@ namespace WhyNotRun.Models.UserViewModel
         [Required(ErrorMessage = "Profissão é obrigatória.")]
         public string Profession { get; set; }
 
+
         public string Picture { get; set; }
 
         public User ToUser()

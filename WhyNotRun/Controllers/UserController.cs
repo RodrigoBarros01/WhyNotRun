@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 using WhyNotRun.BO;
 using WhyNotRun.Models.UserViewModel;
@@ -30,7 +31,7 @@ namespace WhyNotRun.Controllers
             var user = await _userBo.Login(loginViewModel.Email, loginViewModel.Password);
             if (user != null)
             {
-                return Ok(user);
+                return Ok(new AuthenticatedViewModel(user));
             }
             return NotFound();
         }

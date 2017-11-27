@@ -5,6 +5,7 @@ using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using WhyNotRun.BO;
@@ -39,8 +40,76 @@ namespace WhyNotRun.DAO
                 .ToListAsync();
         }
 
+        /// <summary>
+        /// Busca publicações com base em uma palavra chave
+        /// </summary>
+        /// <param name="text">palavra chave</param>
+        /// <param name="techiesId">Lista de tecnologias que a palavra chave se encaixa no nome</param>
+        /// <param name="page">numero da pagina para paginação</param>
+        /// <returns></returns>
+        public async Task<List<Publication>> SearchPublications(string text, List<ObjectId> techiesId, int page)
+        {
+            var filter = FilterBuilder.Regex(a => a.Title, BsonRegularExpression.Create(new Regex(text, RegexOptions.IgnoreCase)))
+                | FilterBuilder.Regex(a => a.Description, BsonRegularExpression.Create(new Regex(text, RegexOptions.IgnoreCase)))
+                | FilterBuilder.AnyIn(a => a.Techies, techiesId)
+                & FilterBuilder.Exists(a => a.DeletedAt, false);
 
+            var sort = SortBuilder.Descending(a => a.DateCreation);
+            var projection = ProjectionBuilder.Slice(a => a.Comments, 0, 3);
 
+            return await Collection
+                .Find(filter)
+                .Sort(sort)
+                .Skip((page - 1) * UtilBO.QUANTIDADE_PAGINAS)
+                .Limit(UtilBO.QUANTIDADE_PAGINAS)
+                .Project<Publication>(projection)
+                .ToListAsync();
+        }
+
+        /// <summary>
+        /// Sugere uma publicação para o usuario com base em uma palavra chave
+        /// </summary>
+        /// <param name="text">palavra chave</param>
+        /// <param name="techiesId">lista de tecnologias que se encaixam nessa palavra chave</param>
+        /// <returns></returns>
+        public async Task<List<ObjectId>> SugestPublication(string text, List<ObjectId> techiesId)
+        {
+            var filter = FilterBuilder.Regex(a => a.Title, BsonRegularExpression.Create(new Regex(text, RegexOptions.IgnoreCase)))
+                | FilterBuilder.Regex(a => a.Description, BsonRegularExpression.Create(new Regex(text, RegexOptions.IgnoreCase)))
+                | FilterBuilder.AnyIn(a => a.Techies, techiesId)
+                & FilterBuilder.Exists(a => a.DeletedAt, false);
+
+            var project = new BsonDocument()
+                .Add( "item", 1 )
+                .Add("points", new BsonDocument{
+                    { "$subtract", new BsonArray{
+                        new BsonDocument{
+                            { "$size", "$likes" }
+                        },
+                        new BsonDocument{
+                            { "$size", "$dislikes" }
+                        }
+                    }}
+                }
+                );
+            
+            
+            var result = await Collection
+                .Aggregate()
+                .Match(filter)
+                .Project(project)
+                .Sort("{points : -1 }")
+                .Limit(7)
+                .ToListAsync();
+
+            List<ObjectId> publicationsId = new List<ObjectId>();
+            foreach (var item in result)
+            {
+                publicationsId.Add(item["_id"].ToString().ToObjectId());
+            }
+            return publicationsId;
+        }
+        
         /// <summary>
         /// Cria uma publicação
         /// </summary>
@@ -81,15 +150,27 @@ namespace WhyNotRun.DAO
         }
 
         /// <summary>
-        /// Busca uma publicação
+        /// Busca uma publicação baseado no ID
         /// </summary>
-        /// <returns>Lista de publicações</returns>
+        /// <param name="publicationId">ID da publicação a ser buscada</param>
+        /// <returns></returns>
         public async Task<Publication> SearchPublicationById(ObjectId publicationId)
         {
             var filter = FilterBuilder.Exists(a => a.DeletedAt, false) & FilterBuilder.Eq(a => a.Id, publicationId);
             return await Collection.Find(filter).FirstOrDefaultAsync();
         }
 
+        /// <summary>
+        /// Busca uma lista de publicações baseado nos id's
+        /// </summary>
+        /// <param name="ids">id's das publicações a serem buscadas</param>
+        /// <returns></returns>
+        public async Task<List<Publication>> SearchPublicationsByIds(List<ObjectId> ids)
+        {
+            var filter = FilterBuilder.Exists(a => a.DeletedAt, false) & FilterBuilder.In(a => a.Id, ids);
+            return await Collection.Find(filter).ToListAsync();
+        }
+        
         /// <summary>
         /// Adiciona um comentario a uma publicação
         /// </summary>
@@ -106,6 +187,13 @@ namespace WhyNotRun.DAO
 
         }
 
+        /// <summary>
+        /// Retorna mais comentarios de uma publicação especifica
+        /// </summary>
+        /// <param name="publicationId">Id da publicação</param>
+        /// <param name="lastCommentId">Id do comentario a ser usado de base para listagem dos proximos</param>
+        /// <param name="limit">quantidade a ser carregada</param>
+        /// <returns></returns>
         public async Task<List<Comment>> SeeMoreComments(ObjectId publicationId, ObjectId lastCommentId, int limit)
         {
 
@@ -140,7 +228,7 @@ namespace WhyNotRun.DAO
                 }
             };
 
-            var result = await 
+            var result = await
                 Collection
                 .Aggregate()
                 .Match(match)
@@ -157,17 +245,6 @@ namespace WhyNotRun.DAO
             }
             return comentarios.ToList();
         }
-
-        ///// <summary>
-        ///// Procura uma lista de publicações
-        ///// </summary>
-        ///// <param name="ids"></param>
-        ///// <returns></returns>
-        //public async Task<List<Publication>> SearchPublications(List<ObjectId> ids)
-        //{
-        //    var filter = FilterBuilder.Exists(a => a.DeletedAt, false) & FilterBuilder.In(a => a.Id, ids);
-        //    return await Collection.Find(filter).ToListAsync();
-        //}
 
 
     }

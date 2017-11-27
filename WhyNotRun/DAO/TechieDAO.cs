@@ -3,6 +3,7 @@ using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using WhyNotRun.Models;
@@ -39,12 +40,28 @@ namespace WhyNotRun.DAO
             return result;
         }
 
+        /// <summary>
+        /// Busca uma tecnologia por nome
+        /// </summary>
+        /// <param name="name">texto a ser procurado</param>
+        /// <returns></returns>
         public async Task<Techie> SearchTechiePerName(string name)
         {
             var filter = FilterBuilder.Eq(a => a.Name, name)
                 & FilterBuilder.Exists(a => a.DeletedAt, false);
-            var result = await Collection.Find(filter).FirstOrDefaultAsync();
-            return result;
+            return await Collection.Find(filter).FirstOrDefaultAsync();
+        }
+
+        /// <summary>
+        /// Busca uma lista de tecnologias que o nome seja parecido com o texto digitado 
+        /// </summary>
+        /// <param name="name">texto a ser procurado</param>
+        /// <returns></returns>
+        public async Task<List<Techie>> SearchTechiesPerName(string name)
+        {
+            var filter = FilterBuilder.Regex(a => a.Name, BsonRegularExpression.Create(new Regex(name, RegexOptions.IgnoreCase)))
+                & FilterBuilder.Exists(a => a.DeletedAt, false);
+            return await Collection.Find(filter).ToListAsync();
         }
 
         /// <summary>
@@ -57,5 +74,7 @@ namespace WhyNotRun.DAO
             var result = await Collection.Find(filter).ToListAsync();
             return result;
         }
+
+
     }
 }
