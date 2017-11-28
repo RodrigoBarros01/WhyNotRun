@@ -224,6 +224,7 @@
     <Compile Include="Models\PublicationViewModel\ViewPublicationViewModel.cs" />
     <Compile Include="Models\Techie.cs" />
     <Compile Include="Models\TechieViewModel\CreateTechieViewModel.cs" />
+    <Compile Include="Models\TechieViewModel\TechiesViewModel.cs" />
     <Compile Include="Models\TechieViewModel\ViewTechieViewModel.cs" />
     <Compile Include="Models\Token.cs" />
     <Compile Include="Models\User.cs" />

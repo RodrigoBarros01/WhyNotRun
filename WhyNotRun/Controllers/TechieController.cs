@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using WhyNotRun.BO;
+using WhyNotRun.Filters;
 using WhyNotRun.Models.TechieViewModel;
 
 namespace WhyNotRun.Controllers
@@ -22,6 +23,7 @@ namespace WhyNotRun.Controllers
 
         [HttpPost]
         [Route("techies")]
+        [WhyNotRunJwtAuth]
         public async Task<IHttpActionResult> CreateTechie(CreateTechieViewModel model)
         {
             var result = await _techieBo.CreateTechie(model.ToTechie());
@@ -34,50 +36,29 @@ namespace WhyNotRun.Controllers
 
         [HttpGet]
         [Route("techies")]
-        public async Task<IHttpActionResult> ListTechies(bool orderByName)
+        public async Task<IHttpActionResult> ListTechies(int page)
         {
-            var result = await _techieBo.ListTechie();
-
+            var result = await _techieBo.ListTechie(page);
             if (result != null)
-                return Ok(result);
-            
+            {
+                return Ok(ViewTechieViewModel.ToList(result));
+            }
+
             return NotFound();
         }
 
         [HttpGet]
-        [Route("techies/order/name")]
-        public async Task<IHttpActionResult> OrderTechiePerName()
+        [Route("techies")]
+        public async Task<IHttpActionResult> SugestTechie(string text)
         {
-            var result = await _techieBo.ListTechieOrderByName();
+            var result = await _techieBo.SugestTechie(text);
             if (result != null)
             {
-                return Ok(result);
+                return Ok(TechiesViewModel.ToList(result));
             }
             return NotFound();
         }
 
-        //[HttpGet]
-        //[Route("techie/amount")]
-        //public async Task<IHttpActionResult> AmountPostsPerTechie(ObjectId techieId)
-        //{
-        //    var result = await _techieBo.AmountPostsPerTechie(techieId);
-        //    if (result >= 0)
-        //    {
-        //        return Ok(result);
-        //    }
-        //    return InternalServerError();
-        //}
 
-        [HttpGet]
-        [Route("techies/points")]
-        public async Task<IHttpActionResult> PointsPublication()
-        {
-            var result = await _techieBo.ListTechieOrderByName();
-            if (result != null)
-            {
-                return Ok(result);
-            }
-            return NotFound();
-        }
     }
 }
