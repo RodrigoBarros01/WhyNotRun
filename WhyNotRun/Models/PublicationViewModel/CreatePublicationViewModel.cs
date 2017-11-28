@@ -15,9 +15,8 @@ namespace WhyNotRun.Models.PublicationViewModel
         public string Title { get; set; }
 
         [Required(ErrorMessage = "A descrição é obrigatória")]
-        public string Description { get; set; }
-
-        //[Required(ErrorMessage = "As tecnologias são obrigatórios")]
+        public string Text { get; set; }
+        
         public List<string> Techies { get; set; }
 
         [Required(ErrorMessage = "O usuário é obrigatório")]
@@ -38,7 +37,7 @@ namespace WhyNotRun.Models.PublicationViewModel
             return new Publication
             {
                 Title = Title,
-                Description = Description,
+                Description = Text,
                 Techies = techiesId,
                 UserId = User.ToObjectId()
             };

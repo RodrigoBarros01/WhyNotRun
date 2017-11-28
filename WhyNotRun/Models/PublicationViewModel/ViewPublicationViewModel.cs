@@ -18,38 +18,35 @@ namespace WhyNotRun.Models.PublicationViewModel
         [JsonProperty(PropertyName = "title")]
         public string Title { get; set; }
 
-        [JsonProperty(PropertyName = "description")]
+        [JsonProperty(PropertyName = "text")]
         public string Description { get; set; }
-        
+
+        [JsonProperty(PropertyName = "datePublication")]
+        public DateTime DateCreation { get; set; }
+
+        [JsonProperty(PropertyName = "user")]
+        public UserInfosViewModel User { get; set; }
+
+        [JsonProperty(PropertyName = "reactions")]
+        public ReactionsViewModel Reactions { get; set; }
+
         [JsonProperty(PropertyName = "techies")]
         public List<ViewTechieViewModel> Techies { get; set; }
-        //public List<string> Techies { get; set; }
-
-        [JsonProperty(PropertyName = "username")]
-        public string UserName { get; set; }
-        [JsonProperty(PropertyName = "userpicture")]
-        public string UserPicture { get; set; }
-        [JsonProperty(PropertyName = "userprofession")]
-        public string UserProfession { get; set; }
 
         [JsonProperty(PropertyName = "comments")]
         public List<Comment> Comments { get; set; }
 
-        [JsonProperty(PropertyName = "points")]
-        public int Points { get; set; }
+        //[JsonProperty(PropertyName = "points")]
+        //public int Points { get; set; }
 
-        [JsonProperty(PropertyName = "datecreation")]
-        public DateTime DateCreation { get; set; }
+
 
         public ViewPublicationViewModel(Publication publication)
         {
             Id = publication.Id;
             Title = publication.Title;
             Description = publication.Description;
-
-            Points = publication.Likes.Count() - publication.Dislikes.Count();
-
-
+            
             #region Pega tecnologias
 
             if (publication.Techies.Count > 0)
@@ -69,6 +66,11 @@ namespace WhyNotRun.Models.PublicationViewModel
 
             #region Dados usuario
 
+            User = new UserInfosViewModel
+            {
+                Id = publication.UserId
+            };
+
             var userBo = new UserBO();
 
             Task.Run(async () =>
@@ -76,11 +78,23 @@ namespace WhyNotRun.Models.PublicationViewModel
                 var user = await userBo.SearchUserPerId(publication.UserId);
                 if (user != null)
                 {
-                    UserName = user.Name;
-                    UserPicture = user.Picture;
-                    UserProfession = user.Profession;
+                    User.Name = user.Name;
+                    User.Picture = user.Picture;
+                    User.Profession = user.Profession;
                 }
             }).Wait();
+
+            #endregion
+
+            #region Reactions
+            
+            //Points = publication.Likes.Count() - publication.Dislikes.Count();
+            Reactions = new ReactionsViewModel
+            {
+                Agree = publication.Likes.Count,
+                Disagree = publication.Dislikes.Count,
+                Comments = publication.Comments.Count
+            };
 
             #endregion
 
@@ -94,8 +108,6 @@ namespace WhyNotRun.Models.PublicationViewModel
         {
 
         }
-
-
         public static List<ViewPublicationViewModel> ToList(List<Publication> publications)
         {
             List<ViewPublicationViewModel> publicationsList = new List<ViewPublicationViewModel>();
@@ -109,8 +121,33 @@ namespace WhyNotRun.Models.PublicationViewModel
 
         }
 
-
-
-
     }
+
+    public class UserInfosViewModel
+    {
+        [JsonProperty(PropertyName = "id")]
+        public ObjectId Id { get; set; }
+
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
+
+        [JsonProperty(PropertyName = "picture")]
+        public string Picture { get; set; }
+
+        [JsonProperty(PropertyName = "profession")]
+        public string Profession { get; set; }
+    }
+
+    public class ReactionsViewModel
+    {
+        [JsonProperty(PropertyName = "points")]
+        public int Agree { get; set; }
+
+        public int Disagree { get; set; }
+
+        public int Comments { get; set; }
+    }
+
+
+
 }
