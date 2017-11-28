@@ -246,6 +246,22 @@ namespace WhyNotRun.DAO
             return comentarios.ToList();
         }
 
+        /// <summary>
+        /// Lista publicações com base em uma tecnologia
+        /// </summary>
+        /// <param name="techieId">id da tecnologia a ser usada como base</param>
+        public async Task<List<Publication>> ListPublicationsPerTechieId(ObjectId techieId)
+        {
+            var filter = FilterBuilder.Exists(a => a.DeletedAt, false) & FilterBuilder.AnyEq(a => a.Techies, techieId);
+            var projection = ProjectionBuilder.Slice(a => a.Comments, 0, 0); //Projeta 0 comentarios pois não vai mostrar a publicação, vai apenas calcular os dados dela então carregar os comentarios é desnecessario
+            return await Collection
+                .Find(filter)
+                .Project<Publication>(projection)
+                .ToListAsync();
+        }
+
+
+
 
     }
 }

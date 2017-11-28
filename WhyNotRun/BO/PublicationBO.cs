@@ -155,5 +155,10 @@ namespace WhyNotRun.BO
             return await SearchPublicationsByIds((await _publicationDao.SugestPublication(text, techiesId)));
         }
         
+        public async Task<List<Publication>> ListPublicationsPerTechieId(ObjectId techieId)
+        {
+            return await _publicationDao.ListPublicationsPerTechieId(techieId);
+        }
+
     }
 }

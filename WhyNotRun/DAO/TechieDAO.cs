@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
+using WhyNotRun.BO;
 using WhyNotRun.Models;
 
 namespace WhyNotRun.DAO
@@ -68,13 +69,30 @@ namespace WhyNotRun.DAO
         /// Lista as Techies não deletadas
         /// </summary>
         /// <returns> Retorna uma lista de Techies</returns>
-        public async Task<List<Techie>> ListTechies()
+        public async Task<List<Techie>> ListTechies(int page)
         {
             var filter = FilterBuilder.Exists(a => a.DeletedAt, false);
-            var result = await Collection.Find(filter).ToListAsync();
-            return result;
+
+            return await Collection
+                .Find(filter)
+                .Skip((page - 1) * UtilBO.QUANTIDADE_PAGINAS)
+                .Limit(UtilBO.QUANTIDADE_PAGINAS)
+                .ToListAsync();
         }
 
+        public async Task<List<Techie>> SugestTechie(string text)
+        {
+            var filter = FilterBuilder.Regex(a => a.Name, BsonRegularExpression.Create(new Regex(text, RegexOptions.IgnoreCase)))
+                & FilterBuilder.Exists(a => a.DeletedAt, false);
+            var sort = SortBuilder.Ascending(a => a.Name);
 
+            return await Collection
+                .Find(filter)
+                .Sort(sort)
+                .Limit(5)
+                .ToListAsync();
+        }
+
+        
     }
 }

@@ -39,38 +39,16 @@ namespace WhyNotRun.BO
         {
             return await _techieDao.SearchTechiesPerName(name);
         }
-
-
-
-        public async Task<List<Techie>> ListTechie()
+        
+        public async Task<List<Techie>> ListTechie(int page)
         {
-            return await _techieDao.ListTechies();
+            return (await _techieDao.ListTechies(page)).OrderBy(a => a.Name).ToList();
+        }
+        
+        public async Task<List<Techie>> SugestTechie(string text)
+        {
+            return await _techieDao.SugestTechie(text);
         }
 
-        public async Task<List<Techie>> ListTechieOrderByName()
-        {
-            var list = await _techieDao.ListTechies();
-            var order = list.OrderBy(a => a.Name).ToList();
-            return order;
-        }
-
-        //public async Task<int> PointsPublication(ObjectId techieId)
-        //{
-        //    var list = (await _publicationBo.ListPublications()).Where(a => a.Techies.Contains(techieId));
-        //    int pontos = 0;
-
-        //    foreach (var item in list)
-        //    {
-        //        pontos += item.Likes.Count - item.Dislikes.Count;
-        //    }
-
-        //    return pontos;
-        //}
-
-        //public async Task<int> AmountPostsPerTechie(ObjectId techieId)
-        //{
-        //    var list = (await _publicationBo.ListPublications()).Where(a => a.Techies.Contains(techieId));
-        //    return list.Count();
-        //}
     }
 }
