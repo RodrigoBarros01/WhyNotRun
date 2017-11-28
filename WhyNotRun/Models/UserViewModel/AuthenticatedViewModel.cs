@@ -12,6 +12,27 @@ namespace WhyNotRun.Models.UserViewModel
         [JsonProperty(PropertyName = "token")]
         public string Token { get; set; }
 
+        [JsonProperty(PropertyName = "user")]
+        public UserInfosViewModel User { get; set; }
+        
+        public AuthenticatedViewModel(User user)
+        {
+            Token token = new Token();
+            Token = token.GenerateToken(user.Id.ToString());
+
+            User = new UserInfosViewModel
+            {
+                Id = user.Id.ToString(),
+                Name = user.Name,
+                Profession = user.Profession,
+                Picture = user.Picture
+            };
+        }
+
+    }
+
+    public class UserInfosViewModel
+    {
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }
 
@@ -23,16 +44,5 @@ namespace WhyNotRun.Models.UserViewModel
 
         [JsonProperty(PropertyName = "picture")]
         public string Picture { get; set; }
-
-        public AuthenticatedViewModel(User user)
-        {
-            Token token = new Token();
-            Token = token.GenerateToken(user.Id.ToString());
-            Id = user.Id.ToString();
-            Name = user.Name;
-            Profession = user.Profession;
-            Picture = user.Picture;
-        }
-
     }
 }
