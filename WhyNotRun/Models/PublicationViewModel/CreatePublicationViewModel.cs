@@ -11,35 +11,50 @@ namespace WhyNotRun.Models.PublicationViewModel
 {
     public class CreatePublicationViewModel
     {
-        [Required(ErrorMessage ="O título é obrigatório")]
+        [Required(ErrorMessage = "O título é obrigatório")]
         public string Title { get; set; }
 
         [Required(ErrorMessage = "A descrição é obrigatória")]
         public string Text { get; set; }
-        
+
         public List<string> Techies { get; set; }
 
         [Required(ErrorMessage = "O usuário é obrigatório")]
-        public string User { get; set; }
+        public string UserId { get; set; }
 
         public Publication ToPublication()
         {
             List<ObjectId> techiesId = new List<ObjectId>();
+
+            TechieBO techieBo = new TechieBO();
             if (Techies.Count > 0)
             {
-                foreach (var id in Techies)
+                Task.Run(async () =>
                 {
-                    techiesId.Add(id.ToObjectId());
-                }
+                    foreach (var name in Techies)
+                    {
+                        var techie = await techieBo.SearchTechiePerName(name);
+                        if (techie != null)
+                        {
+                            techiesId.Add(techie.Id);
+                        }
+                        else
+                        {
+                            var newTechie = await techieBo.CreateTechie(new Techie { Name = name });
+                            techiesId.Add(newTechie.Id);
+                        }
+                    }
+                }).Wait();
             }
-            
-            
+
+
+
             return new Publication
             {
                 Title = Title,
                 Description = Text,
                 Techies = techiesId,
-                UserId = User.ToObjectId()
+                UserId = UserId.ToObjectId()
             };
         }
 

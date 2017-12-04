@@ -30,6 +30,11 @@ namespace WhyNotRun.BO
             return await _techieDao.SearchTechiePerId(id);
         }
 
+        protected async Task<List<Techie>> SearchTechies(List<ObjectId> ids)
+        {
+            return await _techieDao.SearchTechies(ids);
+        }
+
         public async Task<Techie> SearchTechiePerName(string name)
         {
             return await _techieDao.SearchTechiePerName(name);
@@ -40,15 +45,31 @@ namespace WhyNotRun.BO
             return await _techieDao.SearchTechiesPerName(name);
         }
         
-        public async Task<List<Techie>> ListTechie(int page)
+        public async Task<List<Techie>> ListTechie(int page, string order)
         {
-            return (await _techieDao.ListTechies(page)).OrderBy(a => a.Name).ToList();
+            if (order == "name")
+            {
+                return await _techieDao.ListTechies(page);
+            }
+            else if (order == "posts")
+            {
+                var result = await _techieDao.ListTechiesPerPosts(page);
+                if (result != null)
+                {
+                    return await SearchTechies(result);
+                }
+                return null;
+            }
+            else
+            {
+                return await _techieDao.ListTechies(page); //mudar para o de pontos
+            }
         }
         
         public async Task<List<Techie>> SugestTechie(string text)
         {
             return await _techieDao.SugestTechie(text);
         }
-
+        
     }
 }

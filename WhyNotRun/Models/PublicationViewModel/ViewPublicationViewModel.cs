@@ -30,7 +30,7 @@ namespace WhyNotRun.Models.PublicationViewModel
         [JsonProperty(PropertyName = "reactions")]
         public ReactionsViewModel Reactions { get; set; }
 
-        [JsonProperty(PropertyName = "techies")]
+        [JsonProperty(PropertyName = "technologys")]
         public List<TechiesViewModel> Techies { get; set; }
 
         [JsonProperty(PropertyName = "comments")]
@@ -140,11 +140,13 @@ namespace WhyNotRun.Models.PublicationViewModel
 
     public class ReactionsViewModel
     {
-        [JsonProperty(PropertyName = "points")]
+        [JsonProperty(PropertyName = "agree")]
         public int Agree { get; set; }
 
+        [JsonProperty(PropertyName = "disagree")]
         public int Disagree { get; set; }
 
+        [JsonProperty(PropertyName = "comments")]
         public int Comments { get; set; }
     }
 

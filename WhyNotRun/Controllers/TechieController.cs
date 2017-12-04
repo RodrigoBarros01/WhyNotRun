@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using WhyNotRun.BO;
 using WhyNotRun.Filters;
+using WhyNotRun.Models;
 using WhyNotRun.Models.TechieViewModel;
 
 namespace WhyNotRun.Controllers
@@ -36,17 +37,28 @@ namespace WhyNotRun.Controllers
 
         [HttpGet]
         [Route("techies")]
-        public async Task<IHttpActionResult> ListTechies(int page)
+        public async Task<IHttpActionResult> ListTechies(int page, string order)
         {
-            var result = await _techieBo.ListTechie(page);
+            var result = await _techieBo.ListTechie(page, order);
+
             if (result != null)
             {
-                return Ok(ViewTechieViewModel.ToList(result));
+                if (order == "name")
+                {
+                    return Ok(ViewTechieViewModel.ToList(result).OrderBy(a => a.Name));
+                }
+                else if (order == "posts")
+                {
+                    return Ok(ViewTechieViewModel.ToList(result).OrderByDescending(a => a.Posts));
+                }
+                else
+                {
+                    return Ok(ViewTechieViewModel.ToList(result).OrderBy(a => a.Name));//lembrar de mudar isso para pontos
+                }
             }
-
             return NotFound();
         }
-
+        
         [HttpGet]
         [Route("techies")]
         public async Task<IHttpActionResult> SugestTechie(string text)

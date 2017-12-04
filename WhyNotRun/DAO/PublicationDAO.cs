@@ -253,7 +253,7 @@ namespace WhyNotRun.DAO
         public async Task<List<Publication>> ListPublicationsPerTechieId(ObjectId techieId)
         {
             var filter = FilterBuilder.Exists(a => a.DeletedAt, false) & FilterBuilder.AnyEq(a => a.Techies, techieId);
-            var projection = ProjectionBuilder.Slice(a => a.Comments, 0, 0); //Projeta 0 comentarios pois não vai mostrar a publicação, vai apenas calcular os dados dela então carregar os comentarios é desnecessario
+            var projection = ProjectionBuilder.Slice(a => a.Comments, 0, 1); //Projeta 0 comentarios pois não vai mostrar a publicação, vai apenas calcular os dados dela então carregar os comentarios é desnecessario
             return await Collection
                 .Find(filter)
                 .Project<Publication>(projection)

@@ -37,8 +37,18 @@ namespace WhyNotRun.DAO
         {
             var filter = FilterBuilder.Eq(a => a.Id, id)
                 & FilterBuilder.Exists(a => a.DeletedAt, false);
-            var result = await Collection.Find(filter).FirstOrDefaultAsync();
-            return result;
+            return await Collection.Find(filter).FirstOrDefaultAsync();
+        }
+
+        /// <summary>
+        /// Faz a busca de uma lista de techies baseado nos id's
+        /// </summary>
+        /// <param name="ids">Ids para busca</param>
+        /// <returns></returns>
+        public async Task<List<Techie>> SearchTechies(List<ObjectId> ids)
+        {
+            var filter = FilterBuilder.In(a => a.Id, ids) & FilterBuilder.Exists(a => a.DeletedAt, false);
+            return await Collection.Find(filter).ToListAsync();
         }
 
         /// <summary>
@@ -48,8 +58,9 @@ namespace WhyNotRun.DAO
         /// <returns></returns>
         public async Task<Techie> SearchTechiePerName(string name)
         {
-            var filter = FilterBuilder.Eq(a => a.Name, name)
+            var filter = FilterBuilder.Where(a => a.Name.ToLower() == name.ToLower())
                 & FilterBuilder.Exists(a => a.DeletedAt, false);
+
             return await Collection.Find(filter).FirstOrDefaultAsync();
         }
 
@@ -80,6 +91,11 @@ namespace WhyNotRun.DAO
                 .ToListAsync();
         }
 
+        /// <summary>
+        /// Sugere uma tecnologia com base em uma palavra chave
+        /// </summary>
+        /// <param name="text">palavra chave</param>
+        /// <returns></returns>
         public async Task<List<Techie>> SugestTechie(string text)
         {
             var filter = FilterBuilder.Regex(a => a.Name, BsonRegularExpression.Create(new Regex(text, RegexOptions.IgnoreCase)))
@@ -93,6 +109,67 @@ namespace WhyNotRun.DAO
                 .ToListAsync();
         }
 
-        
+        /// <summary>
+        /// Lista tecnologias ordenando por maior quantidade de postagens
+        /// </summary>
+        /// <param name="page">pagina da paginação</param>
+        /// <returns></returns>
+        public async Task<List<ObjectId>> ListTechiesPerPosts(int page)
+        {
+            var project = new BsonDocument()
+                 .Add("item", 1)
+                 .Add("posts", new BsonDocument{
+                    { "$size", "$publications"}}
+                 );
+            
+            var result = await Collection
+                .Aggregate()
+                .Lookup("publication", "_id", "techies", "publications")
+                .Project(project)
+                .Sort("{posts : -1 }")
+                .Skip((page - 1) * UtilBO.QUANTIDADE_PAGINAS)
+                .Limit(UtilBO.QUANTIDADE_PAGINAS)
+                .ToListAsync();
+
+            List<ObjectId> techiesId = new List<ObjectId>();
+            foreach (var item in result)
+            {
+                techiesId.Add(item["_id"].ToString().ToObjectId());
+            }
+            return techiesId;
+            
+        }
+
+        /// <summary>
+        /// Lista tecnologias por maior quantidade de pontos
+        /// </summary>
+        /// <param name="page">Pagina da paginação</param>
+        /// <returns></returns>
+        public async Task<List<ObjectId>> ListTechiesPerPoints(int page)
+        {
+            var project = new BsonDocument()
+                 .Add("item", 1)
+                 .Add("posts", new BsonDocument{
+                    { "$size", "$publications"}}
+                 );
+
+            var result = await Collection
+                .Aggregate()
+                .Lookup("publication", "_id", "techies", "publications")
+                .Project(project)
+                .Sort("{posts : -1 }")
+                .Skip((page - 1) * UtilBO.QUANTIDADE_PAGINAS)
+                .Limit(UtilBO.QUANTIDADE_PAGINAS)
+                .ToListAsync();
+
+            List<ObjectId> techiesId = new List<ObjectId>();
+            foreach (var item in result)
+            {
+                techiesId.Add(item["_id"].ToString().ToObjectId());
+            }
+            return techiesId;
+
+        }
+
     }
 }
