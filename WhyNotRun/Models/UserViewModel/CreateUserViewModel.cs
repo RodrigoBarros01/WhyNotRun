@@ -21,19 +21,28 @@ namespace WhyNotRun.Models.UserViewModel
 
         [Required(ErrorMessage = "Profissão é obrigatória.")]
         public string Profession { get; set; }
-
-
+        
         public string Picture { get; set; }
 
         public User ToUser()
         {
+            string img;
+            if (Picture != null)
+            {
+                img = Picture;
+            }
+            else
+            {
+                img = "";
+            }
+
             return new User
             {
                 Id = ObjectId.GenerateNewId(),
                 Name = Name,
                 Password = Password,
                 Profession = Profession,
-                Picture = Picture,
+                Picture = img,
                 Email = Email
             };
         }

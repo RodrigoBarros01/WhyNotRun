@@ -6,11 +6,13 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using WhyNotRun.BO;
 using WhyNotRun.Models.UserViewModel;
 
 namespace WhyNotRun.Controllers
 {
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class UserController : ApiController
     {
         private UserBO _userBo;
@@ -37,7 +39,7 @@ namespace WhyNotRun.Controllers
         }
 
         [HttpPost]
-        [Route("user")]
+        [Route("users")]
         /*[ FAZER VALIDAÇÃO ]*/
         public async Task<IHttpActionResult> CreateUser(CreateUserViewModel model)
         {
@@ -48,5 +50,7 @@ namespace WhyNotRun.Controllers
             }
             return InternalServerError();
         }
+
+        
     }
 }
