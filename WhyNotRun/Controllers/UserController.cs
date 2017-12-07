@@ -43,6 +43,11 @@ namespace WhyNotRun.Controllers
         /*[ FAZER VALIDAÇÃO ]*/
         public async Task<IHttpActionResult> CreateUser(CreateUserViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("");//passar a msg de erro
+            }
+
             var result = await _userBo.CreateUser(model.ToUser());
             if (result != null)
             {

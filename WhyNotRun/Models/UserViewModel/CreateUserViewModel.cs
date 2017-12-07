@@ -19,6 +19,10 @@ namespace WhyNotRun.Models.UserViewModel
         [Required(ErrorMessage = "Senha é obrigatória para um usuário.")]
         public string Password { get; set; }
 
+        [Required(ErrorMessage = "Confirmação de senha obrigatória.")]
+        [Compare("Password", ErrorMessage = "As senhas não estão iguais")]
+        public string ConfirmPassword { get; set; }
+
         [Required(ErrorMessage = "Profissão é obrigatória.")]
         public string Profession { get; set; }
         
