@@ -33,7 +33,7 @@ namespace WhyNotRun.Models.UserViewModel
             }
             else
             {
-                img = "";
+                img = "../../images/defaultavatar.png";
             }
 
             return new User
