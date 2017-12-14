@@ -47,7 +47,8 @@ namespace WhyNotRun.Models.TechieViewModel
             {
                 viewTechies.Add(new ViewTechieViewModel(techie));
             }
-            return viewTechies;
+
+            return viewTechies.OrderByDescending(a => a.Points).Take(20).ToList();//alterar isso
         }
 
     }

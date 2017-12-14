@@ -62,7 +62,7 @@ namespace WhyNotRun.BO
             }
             else
             {
-                return await _techieDao.ListTechies(page); //mudar para o de pontos
+                return await _techieDao.List(); //mudar para o de pontos
             }
         }
         

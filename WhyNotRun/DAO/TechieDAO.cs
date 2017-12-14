@@ -91,6 +91,17 @@ namespace WhyNotRun.DAO
                 .ToListAsync();
         }
 
+        public async Task<List<Techie>> List()
+        {
+            var filter = FilterBuilder.Exists(a => a.DeletedAt, false);
+
+            return await Collection
+                .Find(filter)
+                .ToListAsync();
+        }
+
+
+
         /// <summary>
         /// Sugere uma tecnologia com base em uma palavra chave
         /// </summary>
@@ -145,31 +156,31 @@ namespace WhyNotRun.DAO
         /// </summary>
         /// <param name="page">Pagina da paginação</param>
         /// <returns></returns>
-        public async Task<List<ObjectId>> ListTechiesPerPoints(int page)
-        {
-            var project = new BsonDocument()
-                 .Add("item", 1)
-                 .Add("posts", new BsonDocument{
-                    { "$size", "$publications"}}
-                 );
+        //public async Task<List<ObjectId>> ListTechiesPerPoints(int page)
+        //{
+        //    var project = new BsonDocument()
+        //         .Add("item", 1)
+        //         .Add("posts", new BsonDocument{
+        //            { "$size", "$publications"}}
+        //         );
 
-            var result = await Collection
-                .Aggregate()
-                .Lookup("publication", "_id", "techies", "publications")
-                .Project(project)
-                .Sort("{posts : -1 }")
-                .Skip((page - 1) * UtilBO.QUANTIDADE_PAGINAS)
-                .Limit(UtilBO.QUANTIDADE_PAGINAS)
-                .ToListAsync();
+        //    var result = await Collection
+        //        .Aggregate()
+        //        .Lookup("publication", "_id", "techies", "publications")
+        //        .Project(project)
+        //        .Sort("{posts : -1 }")
+        //        .Skip((page - 1) * UtilBO.QUANTIDADE_PAGINAS)
+        //        .Limit(UtilBO.QUANTIDADE_PAGINAS)
+        //        .ToListAsync();
 
-            List<ObjectId> techiesId = new List<ObjectId>();
-            foreach (var item in result)
-            {
-                techiesId.Add(item["_id"].ToString().ToObjectId());
-            }
-            return techiesId;
+        //    List<ObjectId> techiesId = new List<ObjectId>();
+        //    foreach (var item in result)
+        //    {
+        //        techiesId.Add(item["_id"].ToString().ToObjectId());
+        //    }
+        //    return techiesId;
 
-        }
+        //}
 
     }
 }
