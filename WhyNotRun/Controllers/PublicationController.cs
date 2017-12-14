@@ -88,7 +88,7 @@ namespace WhyNotRun.Controllers
             var resultado = await _publicationBo.AddComment(model.ToComment(), model.PublicationId.ToObjectId());
             if (resultado)
             {
-                return Ok(new ViewPublicationViewModel(await _publicationBo.SearchPublicationById(model.PublicationId.ToObjectId())));
+                return Ok(new CreatedCommentViewModel(model.ToComment()));
             }
             return StatusCode((HttpStatusCode)422);
 

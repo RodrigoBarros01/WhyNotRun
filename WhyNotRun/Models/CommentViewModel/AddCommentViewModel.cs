@@ -9,22 +9,26 @@ namespace WhyNotRun.Models.CommentViewModel
 {
     public class AddCommentViewModel
     {
+        [Required(ErrorMessage = "A publicação é obrigatória")]
+        public string PublicationId { get; set; }
+
         [Required(ErrorMessage = "O usuário é obrigatório")]
         public string UserId { get; set; }
 
         [Required(ErrorMessage = "A descriação é obrigatória")]
-        public string Description { get; set; }
+        public string Text { get; set; }
 
-        [Required(ErrorMessage = "A publicação é obrigatória")]
-        public string PublicationId { get; set; }
+        
 
         public Comment ToComment()
         {
             return new Comment
             {
                 UserId = UserId.ToObjectId(),
-                Description = Description
+                Description = Text
             };
         }
     }
+
+    
 }

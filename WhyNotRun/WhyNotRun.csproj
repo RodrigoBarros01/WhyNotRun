@@ -217,6 +217,7 @@
     </Compile>
     <Compile Include="Models\Comment.cs" />
     <Compile Include="Models\CommentViewModel\AddCommentViewModel.cs" />
+    <Compile Include="Models\CommentViewModel\CreatedCommentViewModel.cs" />
     <Compile Include="Models\Publication.cs" />
     <Compile Include="Models\PublicationViewModel\CreatePublicationViewModel.cs" />
     <Compile Include="Models\PublicationViewModel\ReactPublicationViewModel.cs" />
