@@ -102,7 +102,7 @@ namespace WhyNotRun.Controllers
         /// <param name="limit">quantidade a ser carregada</param>
         /// <returns></returns>
         [HttpGet]
-        [Route("comments")]
+        [Route("comments")]//lembrar de rever o retorno disso
         public async Task<IHttpActionResult> SeeMoreComments(string publicationId, string lastcommentId, int limit)
         {
             var result = await _publicationBo.SeeMoreComments(publicationId.ToObjectId(), lastcommentId.ToObjectId(), limit);

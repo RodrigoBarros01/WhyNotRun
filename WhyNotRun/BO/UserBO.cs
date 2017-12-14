@@ -53,5 +53,10 @@ namespace WhyNotRun.BO
             return null;
         }
 
+        public async Task<bool> SaveImage(ObjectId userId, string picturePath)
+        {
+            var newPath = "https://whynotrun.blob.core.windows.net/images/" + picturePath;
+            return await _userDao.SaveImage(userId, newPath);
+        }
     }
 }
