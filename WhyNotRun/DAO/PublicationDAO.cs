@@ -150,6 +150,22 @@ namespace WhyNotRun.DAO
         }
 
         /// <summary>
+        /// Remove a like or a dislike from a publication
+        /// </summary>
+        /// <param name="userId">UserId to be removed</param>
+        /// <param name="publicationId">id of the publication</param>
+        /// <returns></returns>
+        public async Task<bool> RemoveLikeAndDislike(ObjectId userId, ObjectId publicationId)
+        {
+            var filter = FilterBuilder.Eq(a => a.Id, publicationId) & FilterBuilder.Exists(a => a.DeletedAt, false);
+            var update = UpdateBuilder.Pull(a => a.Likes, userId).Pull(a => a.Dislikes, userId);
+
+            var resultado = await Collection.UpdateOneAsync(filter, update);
+
+            return resultado.IsModifiedCountAvailable && resultado.IsAcknowledged && resultado.ModifiedCount == 1;
+        }
+
+        /// <summary>
         /// Busca uma publicação baseado no ID
         /// </summary>
         /// <param name="publicationId">ID da publicação a ser buscada</param>

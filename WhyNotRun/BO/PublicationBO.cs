@@ -70,25 +70,33 @@ namespace WhyNotRun.BO
         /// <param name="userId">Usuario que reagiu</param>
         /// <param name="publicationId">publicação reagida</param>
         /// <param name="like">Reação (like = true, dislike = false)</param>
-        public async Task<bool> React(ObjectId userId, ObjectId publicationId, bool like)
+        public async Task<bool> React(ObjectId userId, ObjectId publicationId, bool? like)
         {
             var publicacao = await SearchPublicationById(publicationId);
-            if (like)
+            if (like == null)
             {
-                if (publicacao.Likes.Contains(userId))
-                {
-                    return false;
-                }
-                return await _publicationDao.Like(userId, publicationId);
+                return await _publicationDao.RemoveLikeAndDislike(userId, publicationId);
             }
             else
             {
-                if (publicacao.Dislikes.Contains(userId))
+                if (like == true)
                 {
-                    return false;
+                    if (publicacao.Likes.Contains(userId))
+                    {
+                        return false;
+                    }
+                    return await _publicationDao.Like(userId, publicationId);
                 }
-                return await _publicationDao.Dislike(userId, publicationId);
+                else
+                {
+                    if (publicacao.Dislikes.Contains(userId))
+                    {
+                        return false;
+                    }
+                    return await _publicationDao.Dislike(userId, publicationId);
+                }
             }
+            
         }
 
         /// <summary>

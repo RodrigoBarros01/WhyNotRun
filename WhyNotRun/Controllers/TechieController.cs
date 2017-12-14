@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using WhyNotRun.BO;
 using WhyNotRun.Filters;
 using WhyNotRun.Models;
@@ -13,6 +14,7 @@ using WhyNotRun.Models.TechieViewModel;
 
 namespace WhyNotRun.Controllers
 {
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class TechieController : ApiController
     {
         private TechieBO _techieBo;

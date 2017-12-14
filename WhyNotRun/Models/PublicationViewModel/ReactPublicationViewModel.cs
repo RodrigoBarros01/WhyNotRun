@@ -13,7 +13,7 @@ namespace WhyNotRun.Models.PublicationViewModel
         
 
         [Required(ErrorMessage = "A reação é obrigatoria")]
-        public bool Like { get; set; }
+        public bool? Like { get; set; }
 
     }
 }
