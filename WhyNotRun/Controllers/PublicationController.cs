@@ -86,9 +86,9 @@ namespace WhyNotRun.Controllers
         public async Task<IHttpActionResult> AddComment(AddCommentViewModel model)
         {
             var resultado = await _publicationBo.AddComment(model.ToComment(), model.PublicationId.ToObjectId());
-            if (resultado)
+            if (resultado != null)
             {
-                return Ok(new CreatedCommentViewModel(model.ToComment()));
+                return Ok(new CreatedCommentViewModel(resultado));
             }
             return StatusCode((HttpStatusCode)422);
 

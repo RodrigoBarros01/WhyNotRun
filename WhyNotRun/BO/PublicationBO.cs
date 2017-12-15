@@ -104,7 +104,7 @@ namespace WhyNotRun.BO
         /// </summary>
         /// <param name="comment">Comentario a ser adicionado</param>
         /// <param name="publicationId">publicação que vai receber o comentario</param>
-        public async Task<bool> AddComment(Comment comment, ObjectId publicationId)
+        public async Task<Comment> AddComment(Comment comment, ObjectId publicationId)
         {
             comment.Id = ObjectId.GenerateNewId();
             comment.DateCreation = DateTime.Now;
@@ -114,7 +114,15 @@ namespace WhyNotRun.BO
             comment.UserPicture = user.Picture;
             comment.UserProfession = user.Profession;
 
-            return await _publicationDao.AddComment(comment, publicationId);
+            var result = await _publicationDao.AddComment(comment, publicationId);
+
+            if (result)
+            {
+                return comment;
+            }
+
+            return null;
+
         }
 
         /// <summary>

@@ -26,8 +26,10 @@ namespace WhyNotRun.Models.CommentViewModel
 
         public CreatedCommentViewModel(Comment comment)
         {
-            User = new UserCommentInfosViewModel();
-
+            User = new UserCommentInfosViewModel
+            {
+                Id = comment.UserId
+            };
             var userBo = new UserBO();
 
             Task.Run(async () =>
