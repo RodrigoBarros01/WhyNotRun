@@ -92,7 +92,7 @@ namespace WhyNotRun.Controllers
             }
             return StatusCode((HttpStatusCode)422);
 
-        }
+        }//teste
 
         /// <summary>
         /// Retorna mais comentarios de uma publicação especifica
