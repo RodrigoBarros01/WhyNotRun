@@ -103,9 +103,9 @@ namespace WhyNotRun.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("comments")]//lembrar de rever o retorno disso
-        public async Task<IHttpActionResult> SeeMoreComments(string publicationId, string lastcommentId, int limit)
+        public async Task<IHttpActionResult> SeeMoreComments(string publicationId, string lastCommentId, int limit)
         {
-            var result = await _publicationBo.SeeMoreComments(publicationId.ToObjectId(), lastcommentId.ToObjectId(), limit);
+            var result = await _publicationBo.SeeMoreComments(publicationId.ToObjectId(), lastCommentId.ToObjectId(), limit);
             if (result != null)
             {
                 return Ok(result);
