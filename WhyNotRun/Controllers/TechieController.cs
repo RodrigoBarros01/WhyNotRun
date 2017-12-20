@@ -25,7 +25,7 @@ namespace WhyNotRun.Controllers
         }
 
         [HttpPost]
-        [Route("techies")]
+        [Route("technologies")]
         [WhyNotRunJwtAuth]
         public async Task<IHttpActionResult> CreateTechie(CreateTechieViewModel model)
         {
@@ -38,7 +38,7 @@ namespace WhyNotRun.Controllers
         }
 
         [HttpGet]
-        [Route("techies")]
+        [Route("technologies")]
         public async Task<IHttpActionResult> ListTechies(int page, string order)
         {
             var result = await _techieBo.ListTechie(page, order);
@@ -62,10 +62,22 @@ namespace WhyNotRun.Controllers
         }
         
         [HttpGet]
-        [Route("techies")]
+        [Route("technologies")]
         public async Task<IHttpActionResult> SugestTechie(string text)
         {
             var result = await _techieBo.SugestTechie(text);
+            if (result != null)
+            {
+                return Ok(TechiesViewModel.ToList(result)); //usar essa viewmodel em outro lugar (txt)
+            }
+            return NotFound();
+        }
+
+        [HttpGet]
+        [Route("technologies")]
+        public async Task<IHttpActionResult> ListAllTechies()
+        {
+            var result = await _techieBo.ListAllTechies();
             if (result != null)
             {
                 return Ok(TechiesViewModel.ToList(result));

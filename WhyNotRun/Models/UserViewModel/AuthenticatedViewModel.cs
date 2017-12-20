@@ -35,14 +35,15 @@ namespace WhyNotRun.Models.UserViewModel
     {
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }
-
+        
         [JsonProperty(PropertyName = "name")]
         public string Name { get; set; }
 
-        [JsonProperty(PropertyName = "profession")]
-        public string Profession { get; set; }
-
         [JsonProperty(PropertyName = "picture")]
         public string Picture { get; set; }
+
+        [JsonProperty(PropertyName = "profession")]
+        public string Profession { get; set; }
+        
     }
 }

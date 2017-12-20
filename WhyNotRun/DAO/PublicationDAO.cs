@@ -20,6 +20,20 @@ namespace WhyNotRun.DAO
 
         }
 
+        public async Task<List<Publication>> ListPublications()
+        {
+            var filter = FilterBuilder.Exists(a => a.DeletedAt, false);
+            var sort = SortBuilder.Descending(a => a.DateCreation);
+            var projection = ProjectionBuilder.Slice(a => a.Comments, 0, 3);
+
+
+            return await Collection
+                .Find(filter)
+                .Sort(sort)
+                .Project<Publication>(projection)
+                .ToListAsync();
+        }
+
         /// <summary>
         /// Lista todas as publicações
         /// </summary>
@@ -275,9 +289,6 @@ namespace WhyNotRun.DAO
                 .Project<Publication>(projection)
                 .ToListAsync();
         }
-
-
-
-
+        
     }
 }

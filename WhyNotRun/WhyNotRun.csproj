@@ -239,6 +239,7 @@
     <Compile Include="Models\CommentViewModel\CreatedCommentViewModel.cs" />
     <Compile Include="Models\Publication.cs" />
     <Compile Include="Models\PublicationViewModel\CreatePublicationViewModel.cs" />
+    <Compile Include="Models\PublicationViewModel\ListOfPublicationsViewModel.cs" />
     <Compile Include="Models\PublicationViewModel\ReactPublicationViewModel.cs" />
     <Compile Include="Models\PublicationViewModel\SugestPublicationViewModel.cs" />
     <Compile Include="Models\PublicationViewModel\ViewPublicationViewModel.cs" />

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using WhyNotRun.BO;
+using WhyNotRun.Models.CommentViewModel;
 using WhyNotRun.Models.TechieViewModel;
 
 namespace WhyNotRun.Models.PublicationViewModel
@@ -14,7 +15,7 @@ namespace WhyNotRun.Models.PublicationViewModel
     {
         [JsonProperty(PropertyName = "id")]
         public ObjectId Id { get; set; }
-
+        
         [JsonProperty(PropertyName = "title")]
         public string Title { get; set; }
 
@@ -30,17 +31,13 @@ namespace WhyNotRun.Models.PublicationViewModel
         [JsonProperty(PropertyName = "reactions")]
         public ReactionsViewModel Reactions { get; set; }
 
-        [JsonProperty(PropertyName = "technologys")]
+        [JsonProperty(PropertyName = "technologies")]
         public List<TechiesViewModel> Techies { get; set; }
 
         [JsonProperty(PropertyName = "comments")]
-        public List<Comment> Comments { get; set; }
-
-        //[JsonProperty(PropertyName = "points")]
-        //public int Points { get; set; }
-
-
-
+        public List<CreatedCommentViewModel> Comments { get; set; }
+        
+        
         public ViewPublicationViewModel(Publication publication)
         {
             Id = publication.Id;
@@ -88,17 +85,36 @@ namespace WhyNotRun.Models.PublicationViewModel
 
             #region Reactions
             
-            //Points = publication.Likes.Count() - publication.Dislikes.Count();
             Reactions = new ReactionsViewModel
             {
                 Agree = publication.Likes.Count,
                 Disagree = publication.Dislikes.Count,
-                Comments = publication.Comments.Count
+                Comments = publication.Comments.Count,
+                Like = null                
             };
+
+            var hashToken = UtilBO.ValorAuthorizationHeader(System.Web.HttpContext.Current);
+            if (!string.IsNullOrEmpty(hashToken))
+            {
+                Token token = new Token();
+                var decriptedToken = token.DecodeToken(hashToken);
+                var decriptedTokenValue = decriptedToken.Remove((decriptedToken.Count() -2), 2).Remove(0, 7);
+
+
+                if (publication.Likes.Contains(decriptedTokenValue.ToObjectId()))
+                {
+                    Reactions.Like = true;
+                }
+                else if(publication.Dislikes.Contains(decriptedTokenValue.ToObjectId()))
+                {
+                    Reactions.Like = false;
+                }
+            }
+
 
             #endregion
 
-            Comments = publication.Comments;
+            Comments = CreatedCommentViewModel.ToList(publication.Comments);
 
             DateCreation = publication.DateCreation;
 
@@ -148,6 +164,9 @@ namespace WhyNotRun.Models.PublicationViewModel
 
         [JsonProperty(PropertyName = "comments")]
         public int Comments { get; set; }
+        
+        [JsonProperty(PropertyName = "like")]
+        public bool? Like { get; set; }
     }
 
     

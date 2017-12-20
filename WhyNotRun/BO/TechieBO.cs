@@ -70,6 +70,11 @@ namespace WhyNotRun.BO
         {
             return await _techieDao.SugestTechie(text);
         }
-        
+
+        public async Task<List<Techie>> ListAllTechies()
+        {
+            return await _techieDao.List();
+        }
+
     }
 }

@@ -28,18 +28,17 @@ namespace WhyNotRun.Controllers
         /// </summary>
         /// <returns>Lista de publicações</returns>
         [HttpGet]
-        [Route("publications")]
+        [Route("publications")] //alterar passando o id do ultimo comentario e trazendo só os seguintes dele
         public async Task<IHttpActionResult> ListPublications(int page)
         {
             var resultado = await _publicationBo.ListPublications(page);
             if (resultado != null)
             {
-                return Ok(ViewPublicationViewModel.ToList(resultado));
+                return Ok(new ListOfPublicationsViewModel(resultado));
             }
             return NotFound(); //mudar isso
         }
-
-
+        
         /// <summary>
         /// Cadastrar publicação
         /// </summary>
@@ -63,7 +62,7 @@ namespace WhyNotRun.Controllers
         /// </summary>
         /// <param name="model">dados da publicação reagida</param>
         [HttpPatch]
-        [Route("publications/{id}/react")]
+        [Route("publications/{id}/reactions")]
         [WhyNotRunJwtAuth]
         public async Task<IHttpActionResult> React(string id, ReactPublicationViewModel model)
         {
@@ -88,7 +87,7 @@ namespace WhyNotRun.Controllers
             var resultado = await _publicationBo.AddComment(model.ToComment(), model.PublicationId.ToObjectId());
             if (resultado != null)
             {
-                return Ok(new CreatedCommentViewModel(resultado));
+                return Ok(new CreatedCommentViewModel(resultado)); //mudar isso
             }
             return StatusCode((HttpStatusCode)422);
 
@@ -118,7 +117,7 @@ namespace WhyNotRun.Controllers
         /// </summary>
         /// <param name="text"></param>
         [HttpGet]
-        [Route("publications")]
+        [Route("publications")] 
         public async Task<IHttpActionResult> SearchPublications(string text, int page)
         {
             var result = await _publicationBo.SearchPublications(text, page);
@@ -135,7 +134,7 @@ namespace WhyNotRun.Controllers
         /// <param name="publicationId">ID da publicação a ser buscada</param>
         /// <returns></returns>
         [HttpGet]
-        [Route("publications")]
+        [Route("publications/{publicationId}")]
         public async Task<IHttpActionResult> SearchPublicationById(string publicationId)
         {
             var result = await _publicationBo.SearchPublicationById(publicationId.ToObjectId());

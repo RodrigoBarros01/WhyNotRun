@@ -44,9 +44,21 @@ namespace WhyNotRun.Models.CommentViewModel
 
             Id = comment.Id;
             Description = comment.Description;
-            DateComment = comment.DateCreation;
+            DateComment = comment.DateCreation.ToLocalTime();
             
         }
+
+        public static List<CreatedCommentViewModel> ToList(List<Comment> comments)
+        {
+            List<CreatedCommentViewModel> createdComments = new List<CreatedCommentViewModel>();
+            foreach (var comment in comments)
+            {
+                createdComments.Add(new CreatedCommentViewModel(comment));
+            }
+
+            return createdComments;
+        }
+
     }
 
     public class UserCommentInfosViewModel

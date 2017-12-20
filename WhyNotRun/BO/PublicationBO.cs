@@ -26,6 +26,15 @@ namespace WhyNotRun.BO
         /// Listar publicações
         /// </summary>
         /// <returns>Lista de publicações</returns>
+        public async Task<List<Publication>> ListPublications()
+        {
+            return await _publicationDao.ListPublications();
+        }
+
+        /// <summary>
+        /// Listar publicações
+        /// </summary>
+        /// <returns>Lista de publicações</returns>
         public async Task<List<Publication>> ListPublications(int pagina)
         {
             return await _publicationDao.ListPublications(pagina);

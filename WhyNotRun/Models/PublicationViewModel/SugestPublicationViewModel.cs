@@ -18,10 +18,11 @@ namespace WhyNotRun.Models.PublicationViewModel
         [JsonProperty(PropertyName = "title")]
         public string Title { get; set; }
 
-        [JsonProperty(PropertyName = "techies")]
-        public List<ViewTechieViewModel> Techies { get; set; }
+        [JsonProperty(PropertyName = "technologies")]
+        public List<TechiesViewModel> Techies { get; set; }
         
         [JsonIgnore]
+        [JsonProperty(PropertyName = "points")]
         public int Points { get; set; }
 
         public SugestPublicationViewModel(Publication publication)
@@ -33,7 +34,7 @@ namespace WhyNotRun.Models.PublicationViewModel
 
             if (publication.Techies.Count > 0)
             {
-                this.Techies = new List<ViewTechieViewModel>();
+                Techies = new List<TechiesViewModel>();
                 List<Task<Techie>> tasks = new List<Task<Techie>>();
 
                 var techieBo = new TechieBO();
@@ -41,7 +42,7 @@ namespace WhyNotRun.Models.PublicationViewModel
                     tasks.Add(Task.Run(() => techieBo.SearchTechie(tecId)));
 
                 Task.WaitAll(tasks.ToArray());
-                Parallel.ForEach(tasks, task => Techies.Add(new ViewTechieViewModel(task.Result)));
+                Parallel.ForEach(tasks, task => Techies.Add(new TechiesViewModel(task.Result)));
             }
 
             #endregion

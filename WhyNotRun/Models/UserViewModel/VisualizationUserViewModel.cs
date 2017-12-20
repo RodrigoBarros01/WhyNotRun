@@ -1,4 +1,5 @@
 ﻿using MongoDB.Bson;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,16 +14,19 @@ namespace WhyNotRun.Models.UserViewModel
             Id = user.Id;
             Name = user.Name;
             Email = user.Email;
-            Password = user.Password;
             Profession = user.Profession;
             Picture = user.Picture;
         }
 
+        [JsonProperty(PropertyName = "id")]
         public ObjectId Id { get; set; }
+        [JsonProperty(PropertyName = "name")]
         public string Name { get; set; }
+        [JsonProperty(PropertyName = "email")]
         public string Email { get; set; }
-        public string Password { get; set; }
+        [JsonProperty(PropertyName = "profession")]
         public string Profession { get; set; }
+        [JsonProperty(PropertyName = "picture")]
         public string Picture { get; set; }
     }
 }
