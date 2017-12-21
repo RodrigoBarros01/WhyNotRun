@@ -253,7 +253,7 @@ namespace WhyNotRun.DAO
                     "comments._id",
                     new BsonDocument
                     {
-                        {"$lt", lastCommentId }
+                        {"$gt", lastCommentId }
                     }
                 }
             };
