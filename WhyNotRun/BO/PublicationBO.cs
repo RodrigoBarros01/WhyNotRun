@@ -171,6 +171,10 @@ namespace WhyNotRun.BO
         /// <returns></returns>
         public async Task<List<Publication>> SugestPublication(string text)
         {
+            if (text == null || text == "")
+            {
+                return new List<Publication>();
+            }
             List<ObjectId> techiesId = new List<ObjectId>();
             foreach (var techie in (await _techieBo.SearchTechiesPerName(text)))
             {
@@ -184,6 +188,8 @@ namespace WhyNotRun.BO
         {
             return await _publicationDao.ListPublicationsPerTechieId(techieId);
         }
+
+        
 
     }
 }

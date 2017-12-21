@@ -107,7 +107,7 @@ namespace WhyNotRun.Controllers
             var result = await _publicationBo.SeeMoreComments(publicationId.ToObjectId(), lastCommentId.ToObjectId(), limit);
             if (result != null)
             {
-                return Ok(result);
+                return Ok(CreatedCommentViewModel.ToList(result));
             }
             return NotFound();
         }

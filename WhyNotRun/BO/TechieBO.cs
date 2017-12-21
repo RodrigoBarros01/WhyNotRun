@@ -68,7 +68,18 @@ namespace WhyNotRun.BO
         
         public async Task<List<Techie>> SugestTechie(string text)
         {
-            return await _techieDao.SugestTechie(text);
+            if (text == null)
+            {
+                return (await ListTechie(1, "posts")).Take(5).ToList();
+            }
+            var result = await _techieDao.SugestTechie(text);
+
+            if (!result.Any())
+            {
+                return (await ListTechie(1, "posts")).Take(5).ToList();
+            }
+
+            return result; 
         }
 
         public async Task<List<Techie>> ListAllTechies()

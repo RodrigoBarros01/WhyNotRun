@@ -87,29 +87,40 @@ namespace WhyNotRun.Models.PublicationViewModel
             
             Reactions = new ReactionsViewModel
             {
-                Agree = publication.Likes.Count,
-                Disagree = publication.Dislikes.Count,
-                Comments = publication.Comments.Count,
+                AgreeQuantity = publication.Likes.Count,
+                DisagreeQuantity = publication.Dislikes.Count,
                 Like = null                
             };
 
-            var hashToken = UtilBO.ValorAuthorizationHeader(System.Web.HttpContext.Current);
-            if (!string.IsNullOrEmpty(hashToken))
+            PublicationBO publicationBo = new PublicationBO();
+
+            Task.Run(async () =>
             {
-                Token token = new Token();
-                var decriptedToken = token.DecodeToken(hashToken);
-                var decriptedTokenValue = decriptedToken.Remove((decriptedToken.Count() -2), 2).Remove(0, 7);
+                Reactions.Comments = (await publicationBo.SearchPublicationById(publication.Id)).Comments.Count;
+
+            }).Wait();
+
+            if (string.IsNullOrEmpty(UtilBO.ValorAuthorizationHeader(System.Web.HttpContext.Current)))
+            {
+                var hashToken = UtilBO.ValorAuthorizationHeader(System.Web.HttpContext.Current);
+                if (!string.IsNullOrEmpty(hashToken))
+                {
+                    Token token = new Token();
+                    var decriptedToken = token.DecodeToken(hashToken);
+                    var decriptedTokenValue = decriptedToken.Remove((decriptedToken.Count() - 2), 2).Remove(0, 7);
 
 
-                if (publication.Likes.Contains(decriptedTokenValue.ToObjectId()))
-                {
-                    Reactions.Like = true;
-                }
-                else if(publication.Dislikes.Contains(decriptedTokenValue.ToObjectId()))
-                {
-                    Reactions.Like = false;
+                    if (publication.Likes.Contains(decriptedTokenValue.ToObjectId()))
+                    {
+                        Reactions.Like = true;
+                    }
+                    else if (publication.Dislikes.Contains(decriptedTokenValue.ToObjectId()))
+                    {
+                        Reactions.Like = false;
+                    }
                 }
             }
+            
 
 
             #endregion
@@ -156,11 +167,11 @@ namespace WhyNotRun.Models.PublicationViewModel
 
     public class ReactionsViewModel
     {
-        [JsonProperty(PropertyName = "agree")]
-        public int Agree { get; set; }
+        [JsonProperty(PropertyName = "agreeQuantity")]
+        public int AgreeQuantity { get; set; }
 
-        [JsonProperty(PropertyName = "disagree")]
-        public int Disagree { get; set; }
+        [JsonProperty(PropertyName = "disagreeQuantity")]
+        public int DisagreeQuantity { get; set; }
 
         [JsonProperty(PropertyName = "comments")]
         public int Comments { get; set; }

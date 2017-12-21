@@ -68,7 +68,7 @@ namespace WhyNotRun.Controllers
             var result = await _techieBo.SugestTechie(text);
             if (result != null)
             {
-                return Ok(TechiesViewModel.ToList(result)); //usar essa viewmodel em outro lugar (txt)
+                return Ok(TechiesViewModel.ToList(result)); 
             }
             return NotFound();
         }
