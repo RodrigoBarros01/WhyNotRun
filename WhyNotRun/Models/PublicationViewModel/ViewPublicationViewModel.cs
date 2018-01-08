@@ -100,8 +100,8 @@ namespace WhyNotRun.Models.PublicationViewModel
 
             }).Wait();
 
-            if (!string.IsNullOrEmpty(UtilBO.ValorAuthorizationHeader(System.Web.HttpContext.Current)))
-            {
+            //if (!string.IsNullOrEmpty(UtilBO.ValorAuthorizationHeader(System.Web.HttpContext.Current)))
+            //{
                 var hashToken = UtilBO.ValorAuthorizationHeader(System.Web.HttpContext.Current);
                 if (!string.IsNullOrEmpty(hashToken))
                 {
@@ -119,7 +119,7 @@ namespace WhyNotRun.Models.PublicationViewModel
                         Reactions.Like = false;
                     }
                 }
-            }
+            //}
             
 
 

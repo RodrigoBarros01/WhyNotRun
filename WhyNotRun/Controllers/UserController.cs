@@ -70,6 +70,7 @@ namespace WhyNotRun.Controllers
         [WhyNotRunJwtAuth]
         public async Task<IHttpActionResult> SavePicture(string id)
         {
+
             if (!Request.Content.IsMimeMultipartContent("form-data"))
             {
                 throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);

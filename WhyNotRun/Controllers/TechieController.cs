@@ -55,7 +55,7 @@ namespace WhyNotRun.Controllers
                 }
                 else
                 {
-                    return Ok(ViewTechieViewModel.ToList(result).OrderByDescending(a => a.Points));//lembrar de mudar isso para pontos
+                    return Ok(ViewTechieViewModel.ToList(result).OrderByDescending(a => a.Points));
                 }
             }
             return NotFound();

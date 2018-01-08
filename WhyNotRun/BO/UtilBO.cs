@@ -17,9 +17,12 @@ namespace WhyNotRun.BO
 
         public static string ValorAuthorizationHeader(HttpContext httpContext)
         {
-            var header = httpContext.Request.Headers["Authorization"];
-            if (header != null)
+            var auth = httpContext.Request.Headers["authorization"];
+            var header = auth == "null" ? null : auth;
+
+            if (!string.IsNullOrEmpty(header))
             {
+
                 return header;
             }
             return null;
