@@ -91,7 +91,7 @@ namespace WhyNotRun.Models.PublicationViewModel
                 DisagreeQuantity = publication.Dislikes.Count,
                 Like = null                
             };
-
+            
             PublicationBO publicationBo = new PublicationBO();
 
             Task.Run(async () =>
