@@ -18,6 +18,7 @@ namespace WhyNotRun.DAO
             var databaseUrl = ConfigurationManager.AppSettings["database-url"].ToString();
             _client = new MongoClient(databaseUrl);
             _database = _client.GetDatabase(database);
+            
         }
 
         protected FilterDefinitionBuilder<T> FilterBuilder
